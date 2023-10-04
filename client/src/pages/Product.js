@@ -11,6 +11,11 @@ import Grid from "@mui/material/Grid";
 import UserProduct from '../components/ProductCard';
 
 const theme = createTheme();
+const styles = {
+  background: {
+    background: "#006494",
+  }
+}
 
 const Product = () => {
   const { loading, data } = useQuery(QUERY_ALL_ITEM);
@@ -25,6 +30,7 @@ const Product = () => {
   }
 
   return (
+    <div style={styles.background}>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
@@ -35,7 +41,7 @@ const Product = () => {
             pb: 6,
           }}
         >
-          <Container maxWidth="sm">
+          <Container maxWidth="sm" >
             <Typography
               component="h1"
               variant="h2"
@@ -65,6 +71,7 @@ const Product = () => {
         </Container>
       </main>
     </ThemeProvider>
+    </div>
   );
 };
 

@@ -12,6 +12,7 @@ const styles = {
     minHeight: '100vh',
     padding: '20px',
     width: '100%',
+    background: "#006494",
   },
   content: {
     textAlign: 'center',

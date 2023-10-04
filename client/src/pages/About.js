@@ -7,21 +7,12 @@ import React from 'react';
                 padding: '50px',
                 textAlign: 'center',
             },
-            height: {
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              textAlign: 'center'
-            },
             container: {
-                position: 'absolute',
                 padding: '10px',
-                top: '25%',
-                left: '25%',
                 display: 'flex',
                 border: '5px solid #00A6FB)',
                 boxShadow: '5px 10px 10px #00A6FB',
-                height: '50%',
+                height: 'fit-content',
                 background: '#051923'
             },
             content: {
@@ -31,13 +22,19 @@ import React from 'react';
             },
             p: {
               color: '#00A6FB',
+            },
+            main: {
+              background: "#006494",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100vh'
             }
         };
         
         export default function About() {
           return (
-            <main>
-            <div style={styles.height}>
+            <main style={styles.main}>
               <div className="container" style={styles.container}>
                 <div style={styles.content}>
                 <h1 className='font-link' style={styles.h1}>About Us</h1>
@@ -46,7 +43,6 @@ import React from 'react';
                 </p>
                 </div>
                 </div>
-            </div>
             </main>
           );
         };
