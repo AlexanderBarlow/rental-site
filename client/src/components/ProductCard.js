@@ -6,18 +6,16 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { useQuery } from '@apollo/client';
 import Button from '@mui/material/Button';
+import { useQuery } from '@apollo/client';
 import { QUERY_ALL_ITEM } from '../utils/queries'
 
-function Product({item}) {
+function Product({ item }) {
 
   const rented = (event) => {
     event.preventDefault();
-  document.getElementById(item._id).innerHTML = 'Rented';
-}
-
-
+    document.getElementById(item._id).innerHTML = 'Rented';
+  }
 
   const styles = {
     bgcolor: {
@@ -65,6 +63,5 @@ function Product({item}) {
     </Grid>
   );
 }
-
 
 export default Product;
