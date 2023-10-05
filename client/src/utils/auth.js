@@ -34,6 +34,11 @@ class AuthService {
         localStorage.removeItem('id_token');
         window.location.reload();
     }
+    getUserId() {
+        const token = this.getToken();
+        const decoded = decode(token);
+        return decoded.sub; // Assuming 'sub' field contains the user's ID
+      }
 }
 
 export default new AuthService();

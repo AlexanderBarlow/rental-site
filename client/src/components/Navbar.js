@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "materialize-css/dist/css/materialize.min.css";
 import { Link } from "react-router-dom";
-import Auth from '../utils/auth'
+import Auth from '../utils/auth';
 import LOGO from "../images/logo1.png";
 
 const styles = {
@@ -57,21 +57,28 @@ const styles = {
       justifyContent: 'center',
       alignItems: 'center',
       fontSize: '1rem',
+    },
   },
-},
   '@media (max-width: 414px)': {
     // Adjust styles for screens with a max width of 414px (iPhone 12, for example)
   },
-  // Add more media queries as needed
 };
 
 function Navbar() {
+  const [userId, setUserId] = useState(Auth.getUserId() || null);
+
+  useEffect(() => {
+    // Get the user's ID from AuthService when the component mounts
+    const id = Auth.getUserId();
+    setUserId(id || null);
+  }, []);
+
   const logout = (event) => {
     event.preventDefault();
     Auth.logout();
     window.location.replace('/');
   };
-  
+
   return (
     <nav style={styles.color}>
       <div className="container" style={styles.container}>
@@ -96,9 +103,9 @@ function Navbar() {
               </h3>
             </Link>
           </li>
-          {Auth.loggedIn() ? (
+          {userId ? ( // Conditionally render the link if userId is defined
             <li style={styles.li}>
-              <Link className="text-dark glow" to="/profile">
+              <Link className="text-dark glow" to={`/${userId}`}>
                 <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Profile</h3>
               </Link>
             </li>

@@ -21,7 +21,6 @@ import Product from "./pages/Product";
 import About from './pages/About'
 import ProductForm from './pages/AddProduct'
 import AddProduct from "./pages/AddProduct";
-
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
@@ -58,7 +57,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/market" element={<Product />} />
-              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/:id" element={<ProfilePage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/about" element={<About />} />
               <Route path="/addproduct" element={<AddProduct />} />

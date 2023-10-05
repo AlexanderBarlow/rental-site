@@ -1,30 +1,30 @@
-import * as React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_SESSION_USER } from '../../utils/queries';
 
-
 function MainFeaturedPost(props) {
   const { post } = props;
 
+  // Get the 'id' from the route parameters
   const { id } = useParams();
+  console.log(id);
 
-  const { loading, data }  = useQuery(QUERY_SESSION_USER, {
-    variables: { _id: id }
+  // Use the 'useQuery' hook to fetch user data
+  const { loading, data } = useQuery(QUERY_SESSION_USER, {
+    variables: { profileId: id }, // Pass 'id' as 'profileId'
   });
+  console.log(data);
 
-  const profile = data?.profileUser || {};
-  console.log(profile);
+  const profile = data?.profile || {};
 
   if (loading) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   return (
@@ -62,10 +62,10 @@ function MainFeaturedPost(props) {
             }}
           >
             <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-              Email: dylan@gmail.com
+              {profile.email}
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
-              City: Philly
+              City: {profile.city}
             </Typography>
           </Box>
         </Grid>
