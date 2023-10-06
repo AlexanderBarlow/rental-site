@@ -70,7 +70,9 @@ function Navbar() {
 
   useEffect(() => {
     let id = Auth.getUserId();
+    if (id) {
     id= id.data._id
+    }
     setUserId(id || null);
   }, []);
 
