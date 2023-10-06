@@ -46,27 +46,26 @@ const styles = {
     background: "#006494",
   },
 };
-
 function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-          <Header />
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/market" element={<Product />} />
-              <Route path="/:id" element={<ProfilePage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/addproduct" element={<AddProduct />} />
-            </Routes>
-          <Footer />
-        
+        <Header />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/market" element={<Product />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/addproduct" element={<AddProduct />} />
+          <Route path="/:id" element={<ProfilePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+        </Routes>
+        <Footer />
       </Router>
     </ApolloProvider>
   );
 }
+
 
 export default App;

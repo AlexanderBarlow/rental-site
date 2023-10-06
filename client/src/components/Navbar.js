@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "materialize-css/dist/css/materialize.min.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Auth from '../utils/auth';
 import LOGO from "../images/logo1.png";
 
@@ -65,13 +65,16 @@ const styles = {
 };
 
 function Navbar() {
-  const [userId, setUserId] = useState(Auth.getUserId() || null);
+  const location = useLocation();
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    // Get the user's ID from AuthService when the component mounts
-    const id = Auth.getUserId();
+    let id = Auth.getUserId();
+    id= id.data._id
     setUserId(id || null);
   }, []);
+
+  console.log(userId);
 
   const logout = (event) => {
     event.preventDefault();
@@ -103,25 +106,32 @@ function Navbar() {
               </h3>
             </Link>
           </li>
-          {userId ? ( // Conditionally render the link if userId is defined
-            <li style={styles.li}>
-              <Link className="text-dark glow" to={`/${userId}`}>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Profile</h3>
-              </Link>
-            </li>
+          {userId ? (
+            <>
+              <li style={styles.li}>
+                <Link className="text-dark glow" to={`/${userId}`}>
+                  <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Profile</h3>
+                </Link>
+              </li>
+              <li style={styles.li}>
+                <a className="text-dark glow" onClick={logout}>
+                  <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Logout</h3>
+                </a>
+              </li>
+            </>
           ) : (
-            <li style={styles.li} className="login-link">
-              <Link className="text-dark glow" to="/login">
-                <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Login</h3>
-              </Link>
-            </li>
-          )}
-          {Auth.loggedIn() && (
-            <li style={styles.li}>
-              <a className="text-dark glow" onClick={logout}>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Logout</h3>
-              </a>
-            </li>
+            <>
+              <li style={styles.li} className="login-link">
+                <Link className="text-dark glow" to="/login">
+                  <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Login</h3>
+                </Link>
+              </li>
+              <li style={styles.li} className="signup-link">
+                <Link className="text-dark glow" to="/signup">
+                  <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Signup</h3>
+                </Link>
+              </li>
+            </>
           )}
         </ul>
       </div>

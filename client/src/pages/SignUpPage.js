@@ -35,18 +35,32 @@ function SignUp(props) {
   };
 
 const handleFormSubmit = async (event) => {
-  event.preventDefault(); 
-  console.log(formState);
+  event.preventDefault();
 
- const mutationResponse = await addProfile({
-  variables: {
-    email: formState.email,
-    password: formState.password,
-    city: formState.city,
-  },
- });
- const token = mutationResponse.data.addProfile.token;
- Auth.login(token);
+  try {
+    const { data } = await addProfile({
+      variables: {
+        email: formState.email,
+        password: formState.password,
+        city: formState.city,
+      },
+    });
+
+    if (data.addProfile.token) {
+      // Store the token in local storage using AuthService
+      Auth.login(data.addProfile.token);
+
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  // Clear form values
+  setFormState({
+    email: '',
+    password: '',
+    city: '',
+  });
 };
 
 function Copyright(props) {
