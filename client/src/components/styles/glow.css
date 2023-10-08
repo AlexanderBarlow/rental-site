@@ -1,0 +1,14 @@
+.glow:hover {
+    text-shadow: 0 0 5px #00A6FB;
+    cursor: pointer;
+}
+
+.img {
+    border-radius: 100%;
+}
+
+.img:hover {
+    color: #00A6FB;
+    background: transparent;
+    box-shadow: 0 0 100px purple;
+}

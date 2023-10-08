@@ -1,0 +1,26 @@
+[
+  {
+    "itemName": "Lawnmower",
+    "description": "Cuts fast",
+    "itemPrice": "10",
+    "city": "Test"
+  },
+  {
+    "itemName": "Lawnmower2",
+    "description": "Cuts fast",
+    "itemPrice": "10",
+    "city": "Test1"
+  },
+  {
+    "itemName": "Lawnmower3",
+    "description": "Cuts fast",
+    "itemPrice": "10",
+    "city": "Test2"
+  },
+  {
+    "itemName": "Lawnmower4",
+    "description": "Cuts fast",
+    "itemPrice": "10"
+    ,"city": "Test3"
+  }
+]
