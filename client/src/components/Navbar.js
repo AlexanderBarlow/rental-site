@@ -72,6 +72,8 @@ function Navbar() {
     window.location.replace('/');
   };
   
+  const userId = Auth.getToken();
+
   return (
     <nav style={styles.color}>
       <div className="container" style={styles.container}>
@@ -98,7 +100,7 @@ function Navbar() {
           </li>
           {Auth.loggedIn() ? (
             <li style={styles.li}>
-              <Link className="text-dark glow" to="/profile">
+              <Link className="text-dark glow" to={`/profile/${userId}`}>
                 <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Profile</h3>
               </Link>
             </li>

@@ -9,23 +9,26 @@ import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_SESSION_USER } from '../../utils/queries';
+import Auth from '../../utils/auth';
 
 
 function MainFeaturedPost(props) {
   const { post } = props;
+  const auth = Auth.getProfile() 
+  const ID = auth.data._id
 
-  const { id } = useParams();
+  console.log(ID)
 
-  const { loading, data }  = useQuery(QUERY_SESSION_USER, {
-    variables: { _id: id }
+  const data  = useQuery(QUERY_SESSION_USER, {
+    variables: { profileId: ID }
   });
 
-  const profile = data?.profileUser || {};
+  const profile = data;
+  const userData = profile.data.profile
   console.log(profile);
+  console.log(userData)
+  const userEmail = profile.email;
 
-  if (loading) {
-    return <div>Loading...</div>
-  }
 
   return (
     <Paper
@@ -62,10 +65,10 @@ function MainFeaturedPost(props) {
             }}
           >
             <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-              Email: dylan@gmail.com
+              {userData.email} 
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
-              City: Philly
+              {userData.city}
             </Typography>
           </Box>
         </Grid>

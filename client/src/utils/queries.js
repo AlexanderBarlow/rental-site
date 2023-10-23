@@ -20,18 +20,15 @@ export const QUERY_SINGLE_PROFILE = gql`
 `;
 
 export const QUERY_SESSION_USER = gql`
-    {
-        profile {
-            email
-            city
-            rentable_items {
-                itemName
-                description
-                itemPrice
-                city
-            }
-        }
+query profile($profileId: ID!) {
+    profile(profileId: $profileId) {
+      email
+      city
+      rentable_items {
+        itemName
+      }
     }
+  }
 `;
 
 export const QUERY_ALL_ITEM = gql`
