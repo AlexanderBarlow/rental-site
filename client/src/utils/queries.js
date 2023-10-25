@@ -32,13 +32,13 @@ query profile($profileId: ID!) {
 `;
 
 export const QUERY_ITEMS = gql`
-query Query($profileId: ID!) {
-    profile(profileId: $profileId) {
-      rentable_items {
-        _id
-      }
-    }
+query Rentable_items($profileId: ID!) {
+  rentable_items(profileId: $profileId) {
+    _id
+    itemName
+    itemPrice
   }
+}
 `;
 
 export const  GetItemDetails = gql`

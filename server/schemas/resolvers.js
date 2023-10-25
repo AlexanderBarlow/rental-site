@@ -17,6 +17,19 @@ const resolvers = {
     item: async (parent, { itemId }) => {
       return await Item.findOne({ _id: itemId });
     },
+    rentable_items: async (parent, { profileId }) => {
+      try {
+        const user = await Profile.findOne({ _id: profileId }).populate('rentable_items');
+  
+        if (!user) {
+          throw new Error("User not found");
+        }
+  
+        return user.rentable_items; // This should be populated correctly.
+      } catch (error) {
+        throw new Error("Error fetching rentable items: " + error.message);
+      }
+    },
   },
 
   Mutation: {

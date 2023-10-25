@@ -72,68 +72,24 @@ export default function Blog() {
   const ID = auth.data._id;
   let itemId = [];
 
+  const [showDetails, setShowDetails] = useState([]);
   const { data, loading, error } = useQuery(QUERY_ITEMS, {
     variables: { profileId: ID },
   });
 
-  console.log(data);
-
-  if (data) {
-    const rentData = data.profile.rentable_items;
-    console.log(rentData);
-
-    for (let i = 0; i < rentData.length; i++) {
-      itemId.push(rentData[i]._id);
-    }
-    console.log(itemId);
-  }
-
-  const firstId = itemId[0];
-  const {
-    data: itemData,
-    loading: itemLoading,
-    error: itemError,
-  } = useQuery(GetItemDetails, {
-    variables: { itemId: firstId },
-  });
-  console.log(itemData);
-  let showDetails = [];
-  if (itemData) {
-    showDetails = itemData.item;
-    console.log(showDetails);
-  }
-
-  const [itemDetails, setItemDetails] = useState([]);
-
-  const [userData, setUserData] = useState(null);
-
   useEffect(() => {
-    if (data && data.profile) {
-      const rentData = data.profile.rentable_items;
-      const itemIds = rentData.map((item) => item._id);
-
-      // Create an array to store the promises for each GraphQL query
-      const promises = itemIds.map((itemId) =>
-        // Execute a GraphQL query for each item ID
-        client.query({
-          query: GetItemDetails,
-          variables: { itemIds: [itemId] }, // Use an array with a single item ID
-        })
-      );
-
-      // Use Promise.all to wait for all queries to complete
-      Promise.all(promises)
-        .then((results) => {
-          const itemDetails = results.map((result) => result.data.items[0]);
-          setItemDetails(itemDetails);
-        })
-        .catch((error) => {
-          console.error("Error fetching item details:", error);
-        });
+    if (data) {
+      const rentData = data.rentable_items;
+      console.log(rentData);
+  
+      // Assuming you want to set the showDetails to all items in rentData
+      setShowDetails(rentData);
     }
-  }, [data, client]);
+  }, [data]);
 
-  console.log(itemDetails);
+  console.log(showDetails);
+
+
 
   if (loading) {
     return <p>Loading...</p>;
@@ -147,26 +103,26 @@ export default function Blog() {
           <ContactCard post={mainFeaturedPost} />
           <Grid className="container" spacing={5} sx={{ mt: 3 }}>
             <Grid item xs={12} md={6}>
-              {/* {userData.map((item) => ( */}
+              {showDetails.map((item) => (
               <CardActionArea style={styles} component="a" href="#">
                 <Card
-                  key={showDetails._id}
+                  key={item._id}
                   style={styles.bgcolor}
                   sx={{ display: "flex" }}
                 >
                   <CardContent sx={{ flex: 1 }}>
                     <Typography component="h2" variant="h5" color="white">
-                      {showDetails.itemName}
+                      {item.itemName}
                     </Typography>
                     <Typography
                       style={styles.font}
                       variant="subtitle1"
                       color="white"
                     >
-                      {showDetails.description}
+                      {item.description}
                     </Typography>
                     <Typography variant="subtitle1" paragraph color="white">
-                      ${showDetails.itemPrice}
+                      ${item.itemPrice}
                     </Typography>
                   </CardContent>
                   <CardMedia
@@ -181,7 +137,7 @@ export default function Blog() {
                   />
                 </Card>
               </CardActionArea>
-              {/* ))} */}
+              ))}
             </Grid>
           </Grid>
         </main>

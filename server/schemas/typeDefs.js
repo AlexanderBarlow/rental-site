@@ -6,9 +6,9 @@ const typeDefs = gql`
     email: String
     city: String
     password: String
-    rentable_items: [Items]
+    rentable_items: [Item]
   }
-  type Items {
+  type Item {
     _id: ID
     itemName: String
     description: String
@@ -38,8 +38,9 @@ const typeDefs = gql`
   type Query {
     profiles: [Profile]
     profile(profileId: ID!): Profile
-    items: [Items]
-    item(itemId: ID!): Items
+    items: [Item]
+    item(itemId: ID!): Item
+    rentable_items(profileId: ID!): [Item]
   }
   type Mutation {
     addProfile(email: String!, password: String!, city: String!): Auth
@@ -50,9 +51,9 @@ const typeDefs = gql`
       description: String
       itemPrice: String!
       city: String!
-    ): Items
+    ): Item
     rentItem(_id: ID!): Profile
-    removeItem(_id: ID!): Items
+    removeItem(_id: ID!): Item
   }
 `;
 
