@@ -98,7 +98,7 @@ export default function Blog() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="lg" style={styles}>
+      <Container maxWidth="lg" >
         <main>
           <ContactCard post={mainFeaturedPost} />
           <Grid className="container" spacing={5} sx={{ mt: 3 }}>

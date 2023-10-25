@@ -11,6 +11,7 @@ const styles = {
   height: {
     height: "100%",
     padding: "2px",
+    background: "#006494"
   },
   btn: {
     fontSize: "1.25rem", 
