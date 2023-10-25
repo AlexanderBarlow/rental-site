@@ -20,18 +20,38 @@ export const QUERY_SINGLE_PROFILE = gql`
 `;
 
 export const QUERY_SESSION_USER = gql`
-    {
-        profile {
-            email
-            city
-            rentable_items {
-                itemName
-                description
-                itemPrice
-                city
-            }
-        }
+query profile($profileId: ID!) {
+    profile(profileId: $profileId) {
+      email
+      city
+      rentable_items {
+        itemName
+      }
     }
+  }
+`;
+
+export const QUERY_ITEMS = gql`
+query Rentable_items($profileId: ID!) {
+  rentable_items(profileId: $profileId) {
+    _id
+    itemName
+    itemPrice
+  }
+}
+`;
+
+export const  GetItemDetails = gql`
+query GetItemDetails($itemId: ID!) {
+    item(itemId: $itemId) {
+      _id
+      itemName
+      description
+      itemPrice
+      city
+      availability
+    }
+  }
 `;
 
 export const QUERY_ALL_ITEM = gql`

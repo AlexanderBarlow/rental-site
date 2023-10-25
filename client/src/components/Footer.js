@@ -15,8 +15,8 @@ const styles = {
 };
 
 const Footer = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  // const navigate = useNavigate();
+  // const location = useLocation();
   return (
     <footer class="page-footer" style={styles.color}>
       <div class="container">
@@ -62,7 +62,7 @@ const Footer = () => {
             href="https://github.com/AlexanderBarlow/rental-site"
           >
             <img
-              src="github-mark.png"
+              src=""
               alt="github logo"
               style={styles.img}
               className="img"

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -8,27 +8,44 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { useQuery } from '@apollo/client';
 import Button from '@mui/material/Button';
+import { QUERY_ITEMS } from '../../utils/queries';
+import Auth from '../../utils/auth';
+import { GetItemDetails } from '../../utils/queries';
 
-import { QUERY_ALL_ITEM } from '../../utils/queries'
+function FeaturedPost({ item }) {
+  const auth = Auth.getProfile();
+  const ID = auth.data._id;
 
-function FeaturedPost({item}) {
+  const { data, loading, error } = useQuery(QUERY_ITEMS, {
+    variables: { profileId: ID },
+  });
 
-  // const { loading, data }  = useQuery(QUERY_ALL_ITEM);
+  const { results } = useQuery(GetItemDetails, {
+    variables: { itemIds: item },
+  });
 
-  // const item = data?.items || {};
+  console.log(results);
 
-  // console.log(data)
-  // console.log(item)
+  const [userData, setUserData] = useState(null);
 
-  // if (loading) {
-  //   return <div>Loading...</div>
-  // }
+  useEffect(() => {
+    if (data && data.profile) {
+      setUserData(data.profile.rentable_items);
+    }
+  }, [data]);
 
-  // const { post } = props;
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if(error) {
+    return <p>Error</p>
+  }
+
+  const itemData = data
 
   const styles = {
     bgcolor: {
-      background: '#003554'
+      background: '#003554',
     },
     font: {
       fontFamily: 'Times New Roman',
@@ -37,47 +54,53 @@ function FeaturedPost({item}) {
     boxShadow: '5px 10px 10px #00A6FB',
     marginBottom: '30px',
     borderRadius: '10px',
-  }
+  };
 
   const img = {
     image: 'https://source.unsplash.com/random',
   };
 
+  if (!userData || userData.length === 0) {
+    return <div>No Rentable Items</div>;
+  }
+
+  if (!userData || userData.length === 0) {
+    return <div>No Rentable Items</div>;
+  }
+  
+
   return (
     <Grid item xs={12} md={6}>
       <CardActionArea style={styles} component="a" href="#">
-        <Card style={styles.bgcolor} sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography component="h2" variant="h5" color="white">
-              {item.itemName}
-            </Typography>
-            <Typography style={styles.font} variant="subtitle1" color="white">
-              {item.description}
-            </Typography>
-            <Typography variant="subtitle1" paragraph color="white">
-              ${item.itemPrice}
-            </Typography>
-          </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: '150px', height: "150px", display: { xs: 'none', sm: 'block' } }}
-            image={img.image}
-            alt='alt text'
-          />
-        </Card>
+          <Card
+            style={styles.bgcolor}
+            sx={{ display: 'flex' }}
+          >
+            <CardContent sx={{ flex: 1 }}>
+              <Typography component="h2" variant="h5" color="white">
+                {itemData.itemName}
+              </Typography>
+              <Typography style={styles.font} variant="subtitle1" color="white">
+                {itemData.description}
+              </Typography>
+              <Typography variant="subtitle1" paragraph color="white">
+                ${itemData.itemPrice}
+              </Typography>
+            </CardContent>
+            <CardMedia
+              component="img"
+              sx={{ width: '150px', height: '150px', display: { xs: 'none', sm: 'block' } }}
+              image={img.image}
+              alt="alt text"
+            />
+          </Card>
       </CardActionArea>
     </Grid>
   );
-}
+} 
 
-// FeaturedPost.propTypes = {
-//   post: PropTypes.shape({
-//     date: PropTypes.string.isRequired,
-//     description: PropTypes.string.isRequired,
-//     image: PropTypes.string.isRequired,
-//     imageLabel: PropTypes.string.isRequired,
-//     title: PropTypes.string.isRequired,
-//   }).isRequired,
-// };
+FeaturedPost.propTypes = {
+  item: PropTypes.object.isRequired, // Define the shape of your item prop as needed
+};
 
 export default FeaturedPost;

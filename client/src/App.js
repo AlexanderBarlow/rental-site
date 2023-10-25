@@ -19,7 +19,6 @@ import CheckoutPage from "./pages/CheckoutPage";
 import ProfilePage from "./pages/ProfilePage";
 import Product from "./pages/Product";
 import About from './pages/About'
-import ProductForm from './pages/AddProduct'
 import AddProduct from "./pages/AddProduct";
 
 const httpLink = createHttpLink({
@@ -42,11 +41,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const styles = {
-  main: {
-    background: "#006494",
-  },
-};
 
 function App() {
   return (
@@ -58,7 +52,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/market" element={<Product />} />
-              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/about" element={<About />} />
               <Route path="/addproduct" element={<AddProduct />} />
