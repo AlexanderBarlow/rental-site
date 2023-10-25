@@ -31,6 +31,29 @@ query profile($profileId: ID!) {
   }
 `;
 
+export const QUERY_ITEMS = gql`
+query Query($profileId: ID!) {
+    profile(profileId: $profileId) {
+      rentable_items {
+        _id
+      }
+    }
+  }
+`;
+
+export const  GetItemDetails = gql`
+query GetItemDetails($itemId: ID!) {
+    item(itemId: $itemId) {
+      _id
+      itemName
+      description
+      itemPrice
+      city
+      availability
+    }
+  }
+`;
+
 export const QUERY_ALL_ITEM = gql`
     query items {
         items {

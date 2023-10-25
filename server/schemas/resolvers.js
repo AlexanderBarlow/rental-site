@@ -5,16 +5,13 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     profiles: async () => {
-      // return await Profile.find();
       const allProfiles = await Profile.find();
-      console.log(allProfiles);
       return allProfiles;
     },
-
     profile: async (parent, { profileId }) => {
       return await Profile.findOne({ _id: profileId });
     },
-    items: async (parent, { itemName, description, itemPrice }) => {
+    items: async () => {
       return await Item.find();
     },
     item: async (parent, { itemId }) => {
@@ -37,9 +34,7 @@ const resolvers = {
       const profile = await Profile.findOne({ email });
 
       if (!profile) {
-        throw new AuthenticationError(
-          "No profile found with this email address"
-        );
+        throw new AuthenticationError("No profile found with this email address");
       }
 
       const correctPw = await profile.isCorrectPassword(password);
@@ -53,17 +48,24 @@ const resolvers = {
       return { token, profile };
     },
 
-    addItem: async (
-      parent,
-      { itemName, description, itemPrice, city },
-    ) => {
-      console.log({ itemName, description, itemPrice, city });
+    addItem: async (parent, { itemName, description, itemPrice, city }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError("Authentication required");
+      }
+
       const newItem = await Item.create({
         itemName,
         description,
         itemPrice,
         city,
+        itemOwner: context.user._id,
+        availability: true,
       });
+
+      await Profile.findByIdAndUpdate(context.user._id, {
+        $push: { rentable_items: newItem._id },
+      });
+
       return newItem;
     },
 
@@ -73,19 +75,22 @@ const resolvers = {
         { availability: false },
         { new: true }
       );
-      const renterProfileUpdate = Profile.findByIdAndUpdate(
-        { _id: context.user.id },
+
+      await Profile.findByIdAndUpdate(
+        context.user._id,
         { $addToSet: { rentedItems: rented._id } },
         { new: true }
       );
 
-      if (!this.rented) throw new AuthenticationError("Item is not available");
+      if (!rented) {
+        throw new AuthenticationError("Item is not available");
+      }
 
-      return renterProfileUpdate;
+      return rented;
     },
 
     removeItem: async (parent, { _id }) => {
-      return;
+      return await Item.findOneAndRemove({ _id });
     },
   },
 };

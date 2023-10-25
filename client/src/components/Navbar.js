@@ -113,7 +113,7 @@ function Navbar() {
           )}
           {Auth.loggedIn() && (
             <li style={styles.li}>
-              <a className="text-dark glow" onClick={logout}>
+              <a href='' className="text-dark glow" onClick={logout}>
                 <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Logout</h3>
               </a>
             </li>

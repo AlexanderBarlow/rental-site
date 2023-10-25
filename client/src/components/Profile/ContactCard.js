@@ -1,90 +1,76 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
-import Box from '@mui/material/Box';
-
-import { useParams } from 'react-router-dom';
+import Auth from '../../utils/auth';
 import { useQuery } from '@apollo/client';
 import { QUERY_SESSION_USER } from '../../utils/queries';
-import Auth from '../../utils/auth';
-
+import Box from '@mui/material/Box';
 
 function MainFeaturedPost(props) {
   const { post } = props;
-  const auth = Auth.getProfile() 
-  const ID = auth.data._id
+  const auth = Auth.getProfile();
+  const ID = auth.data._id;
 
-  console.log(ID)
-
-  const data  = useQuery(QUERY_SESSION_USER, {
-    variables: { profileId: ID }
+  const { data, loading, error } = useQuery(QUERY_SESSION_USER, {
+    variables: { profileId: ID },
   });
 
-  const profile = data;
-  const userData = profile.data.profile
-  console.log(profile);
-  console.log(userData)
-  const userEmail = profile.email;
+  const [userData, setUserData] = useState(null);
 
+  useEffect(() => {
+    if (data && data.profile) {
+      setUserData(data.profile);
+    }
+  }, [data]);
 
-  return (
-    <Paper
-      sx={{
-        position: 'relative',
-        backgroundColor: 'grey.800',
-        color: '#fff',
-        mb: 4,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundImage: `url(${post.image})`,
-      }}
-    >
-      {/* Increase the priority of the hero background image */}
-      {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
-      <Box
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  if (userData) {
+    return (
+      <Paper
         sx={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-          backgroundColor: 'rgba(0,0,0,.3)',
+          position: 'relative',
+          backgroundColor: 'grey.800',
+          color: '#fff',
+          mb: 4,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundImage: `url(${post.image})`,
         }}
-      />
-      <Grid container>
-        <Grid item md={6}>
-          <Box
-            sx={{
-              position: 'relative',
-              p: { xs: 3, md: 6 },
-              pr: { md: 0 },
-            }}
-          >
-            <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-              {userData.email} 
-            </Typography>
-            <Typography variant="h5" color="inherit" paragraph>
-              {userData.city}
-            </Typography>
-          </Box>
+      >
+        {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
+        <Grid container>
+          <Grid item md={6}>
+            <Box
+              sx={{
+                position: 'relative',
+                p: { xs: 3, md: 6 },
+                pr: { md: 0 },
+              }}
+            >
+              <Typography component="h1" variant="h3" color="inherit" gutterBottom>
+                {userData.email}
+              </Typography>
+              <Typography variant="h5" color="inherit" paragraph>
+                {userData.city}
+              </Typography>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-    </Paper>
-  );
+      </Paper>
+    );
+  } else {
+    return <p>Loading...</p>;
+  }
 }
-
-MainFeaturedPost.propTypes = {
-  post: PropTypes.shape({
-    description: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    imageText: PropTypes.string.isRequired,
-    linkText: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default MainFeaturedPost;
