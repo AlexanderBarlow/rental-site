@@ -14,8 +14,29 @@ const theme = createTheme();
 const styles = {
   background: {
     background: "#006494",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "start",
+    height: "100%",
+    width: "100%",
+  },
+  container: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    paddingLeft: "4%",
+    paddingRight: "4%",
   }
 }
+
+const largeScreenStyles = {
+  [theme.breakpoints.up("lg")]: {
+    height: "100vh",
+    widthL: "100vw",
+  },
+};
 
 const Product = () => {
   const { loading, data } = useQuery(QUERY_ALL_ITEM);
@@ -30,11 +51,11 @@ const Product = () => {
   }
 
   return (
-    <div style={styles.background}>
+    <div style={{ ...styles.background, ...largeScreenStyles }}>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-        {/* Hero unit */}
+        
         <Box
           sx={{
             pt: 8,
@@ -61,14 +82,16 @@ const Product = () => {
             </Typography>
           </Container>
         </Box>
-        {/* End hero unit */}
-        <Container sx={{ py: 8 }} maxWidth="md">
-          <Grid container spacing={2}>
+        
+        <div style={styles.container}>
+          <Grid container spacing={{ xs: 4, sm: 8, md: 20 }} >
             {items.map((item) => (
+              <Grid item xs={12} md={6} lg={6} xl={3}>
               <UserProduct key={item._id} item={item} />
+              </Grid>
             ))}
           </Grid>
-        </Container>
+        </div>
       </main>
     </ThemeProvider>
     </div>
