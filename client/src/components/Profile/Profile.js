@@ -18,6 +18,8 @@ import Typography from "@mui/material/Typography";
 import { QUERY_ITEMS } from "../../utils/queries";
 import { GetItemDetails } from "../../utils/queries";
 import { useApolloClient } from "@apollo/client";
+import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
 
 const styles = {
   marginBottom: "50px",
@@ -26,6 +28,17 @@ const styles = {
   },
   font: {
     fontFamily: "Times New Roman",
+  },
+  center: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  btn: {
+    fontSize: "1.25rem", 
+    fontWeight: "700", 
+    color: "#00A6FB",
+    background: "#051923",
   },
   border: "5px solid black",
   boxShadow: "5px 10px 10px #00A6FB",
@@ -101,6 +114,13 @@ export default function Blog() {
       <Container maxWidth="lg" >
         <main>
           <ContactCard post={mainFeaturedPost} />
+          <Link  to="/addproduct">
+        <div style={styles.center}>
+        <Button variant="contained" style={styles.btn} className="glow">
+          Add your Product!
+        </Button>
+        </div>
+      </Link>
           <Grid className="container" spacing={5} sx={{ mt: 3 }}>
             <Grid item xs={12} md={6}>
               {showDetails.map((item) => (
