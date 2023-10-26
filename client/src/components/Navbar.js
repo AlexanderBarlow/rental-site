@@ -86,11 +86,6 @@ function Navbar() {
   return (
     <>
       <ul id="dropdown1" className="dropdown-content">
-        <li>
-          <Link to='/login'>
-          <p>Login</p>
-          </Link>
-        </li>
         <li className="divider"></li>
         <li>
           <Link to='/market'>
@@ -103,6 +98,32 @@ function Navbar() {
           <p>About</p>
           </Link>
         </li>
+        {Auth.loggedIn() ? (
+                <li >
+                  <Link to={`/profile/${userId}`}>
+                    <p>
+                      Profile
+                    </p>
+                  </Link>
+                </li>
+              ) : (
+                <li>
+                  <Link to="/login">
+                    <p>
+                      Login
+                    </p>
+                  </Link>
+                </li>
+              )}
+              {Auth.loggedIn() && (
+                <li>
+                  <a onClick={logout}>
+                    <p >
+                      Logout
+                    </p>
+                  </a>
+                </li>
+              )}
       </ul>
 
       {isSmallScreen ? (
