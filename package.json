@@ -20,6 +20,7 @@
         "concurrently": "^5.1.0"
     },
     "dependencies": {
+        "@mui/icons-material": "^5.14.15",
         "server": "^1.0.38"
     }
 }
