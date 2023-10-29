@@ -89,38 +89,38 @@ function Navbar() {
         <li className="divider"></li>
         <li>
           <Link to='/market'>
-          <p >Market</p>
+          <h5 >Market</h5>
           </Link>
         </li>
         <li className="divider"></li>
         <li>
           <Link to='/about'>
-          <p>About</p>
+          <h5>About</h5>
           </Link>
         </li>
         {Auth.loggedIn() ? (
                 <li >
                   <Link to={`/profile/${userId}`}>
-                    <p>
+                    <h5>
                       Profile
-                    </p>
+                    </h5>
                   </Link>
                 </li>
               ) : (
                 <li>
                   <Link to="/login">
-                    <p>
+                    <h5>
                       Login
-                    </p>
+                    </h5>
                   </Link>
                 </li>
               )}
               {Auth.loggedIn() && (
                 <li>
                   <a onClick={logout}>
-                    <p >
+                    <h5>
                       Logout
-                    </p>
+                    </h5>
                   </a>
                 </li>
               )}
