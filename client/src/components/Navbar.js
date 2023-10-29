@@ -151,7 +151,7 @@ function Navbar() {
               <li className="nav-items" style={styles.li}>
                 <Link className="text-dark glow" to="/market">
                   <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>
-                    Products
+                    Market Place
                   </h3>
                 </Link>
               </li>
