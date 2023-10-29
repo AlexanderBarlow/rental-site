@@ -103,11 +103,6 @@ export default function Blog() {
   console.log(showDetails);
 
 
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -124,9 +119,8 @@ export default function Blog() {
           <Grid className="container" spacing={5} sx={{ mt: 3 }}>
             <Grid item xs={12} md={6}>
               {showDetails.map((item) => (
-              <CardActionArea style={styles} component="a" href="#">
+              <CardActionArea style={styles} component="a" key={item._id}>
                 <Card
-                  key={item._id}
                   style={styles.bgcolor}
                   sx={{ display: "flex" }}
                 >

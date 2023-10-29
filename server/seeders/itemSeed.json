@@ -3,7 +3,8 @@
     "itemName": "Lawnmower",
     "description": "Cuts fast",
     "itemPrice": "10",
-    "city": "Test"
+    "city": "Test",
+    "availability": true
   },
   {
     "itemName": "Lawnmower2",

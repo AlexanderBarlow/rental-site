@@ -6,11 +6,32 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
+import { useMutation } from "@apollo/client";
+import { UPDATE_ITEM_AVAILABILITY, ADD_ITEM_TO_CART } from "../utils/mutations";
+import Auth from "../utils/auth";
+
 function Product({ item }) {
-  const rented = (event) => {
+  const [updateItemAvailability] = useMutation(UPDATE_ITEM_AVAILABILITY);
+  const [addItemToCart] = useMutation(ADD_ITEM_TO_CART);
+
+  const user = Auth.getProfile().data._id;
+
+  const rented = async (event) => {
     event.preventDefault();
-    document.getElementById(item._id).innerHTML = "In Cart";
-    document.getElementById(item._id).style.background = "#00A6FB";
+    if (item.availability) {
+      await updateItemAvailability({
+        variables: {
+          _id: item._id,
+        },
+      });
+
+      await addItemToCart({
+        variables: {
+          itemId: item._id,
+          userId: user,
+        },
+      });
+    }
   };
 
   const styles = {
@@ -28,8 +49,7 @@ function Product({ item }) {
       display: "flex",
       justifyContent: "start",
       alignItems: "center",
-
-    }
+    },
   };
 
   const img = {
@@ -51,14 +71,15 @@ function Product({ item }) {
               ${item.itemPrice}
             </Typography>
             <div style={styles.btn}>
-            <Button
-              variant="contained"
-              className="glow"
-              id={item._id}
-              onClick={rented}
-            >
-              Add to Cart
-            </Button>
+              <Button
+                variant="contained"
+                className="glow"
+                id={item._id}
+                onClick={rented}
+                disabled={!item.availability}
+              >
+                {item.availability ? "Add to Cart" : "Unavailable"}
+              </Button>
             </div>
           </CardContent>
           <CardMedia

@@ -45,3 +45,30 @@ export const ADD_ITEM = gql`
             }
         }
 `;
+
+export const UPDATE_ITEM_AVAILABILITY = gql`
+  mutation updateItemAvailability($_id: ID!) {
+    updateItemAvailability(_id: $_id) {
+      _id
+      itemName
+      description
+      itemPrice
+      city
+      availability
+    }
+  }
+`;
+
+export const ADD_ITEM_TO_CART = gql`
+mutation AddItemToCart($userId: ID!, $itemId: ID!) {
+    addItemToCart(userId: $userId, itemId: $itemId) {
+      _id
+      email
+      cart {
+        _id
+        itemName
+        itemPrice
+      }
+    }
+  }
+  `;

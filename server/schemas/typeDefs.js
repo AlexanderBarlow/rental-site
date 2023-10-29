@@ -3,10 +3,11 @@ const { gql } = require("apollo-server-express");
 const typeDefs = gql`
   type Profile {
     _id: ID
-    email: String
-    city: String
-    password: String
+    email: String!
+    city: String!
+    password: String!
     rentable_items: [Item]
+    cart: [Item]
   }
   type Item {
     _id: ID
@@ -15,7 +16,7 @@ const typeDefs = gql`
     itemPrice: String
     itemOwner: Profile
     itemRenter: Profile
-    city: String,
+    city: String
     availability: Boolean
   }
   type Address {
@@ -41,6 +42,7 @@ const typeDefs = gql`
     items: [Item]
     item(itemId: ID!): Item
     rentable_items(profileId: ID!): [Item]
+    userCart(userId: ID!): [Item]  # New query to get user's cart
   }
   type Mutation {
     addProfile(email: String!, password: String!, city: String!): Auth
@@ -54,6 +56,8 @@ const typeDefs = gql`
     ): Item
     rentItem(_id: ID!): Profile
     removeItem(_id: ID!): Item
+    updateItemAvailability(_id: ID!): Item
+    addItemToCart(userId: ID!, itemId: ID!): Profile
   }
 `;
 

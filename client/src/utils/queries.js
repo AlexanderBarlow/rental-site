@@ -57,10 +57,24 @@ query GetItemDetails($itemId: ID!) {
 export const QUERY_ALL_ITEM = gql`
     query items {
         items {
-        itemName
-        description
-        itemPrice
-        _id
+          _id
+          availability
+          city
+          description
+          itemName
+          itemPrice
     }
     }
+`;
+
+export const GET_CART = gql`
+query Items($userId: ID!) {
+  userCart(userId: $userId) {
+    itemName
+    itemPrice
+    itemOwner {
+      _id
+    }
+  }
+} 
 `;

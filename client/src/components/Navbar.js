@@ -3,9 +3,11 @@ import "materialize-css/dist/css/materialize.min.css";
 import { Link } from "react-router-dom";
 import Auth from "../utils/auth";
 import LOGO from "../images/logo1.png";
-import Icon from '@mui/icons-material/Menu';
-import M from 'materialize-css';
-
+import Icon from "@mui/icons-material/ShoppingCart"; // Import the appropriate icon for the cart
+import M from "materialize-css";
+import { useQuery } from "@apollo/client";
+import { GET_CART } from "../utils/queries";
+import Icon2 from "@mui/icons-material/Menu";
 
 const styles = {
   color: {
@@ -44,23 +46,20 @@ const styles = {
 function DropdownTrigger() {
   useEffect(() => {
     // Initialize the dropdown
-    const dropdownElement = document.querySelector('.dropdown-trigger');
+    const dropdownElement = document.querySelector(".dropdown-trigger");
     M.Dropdown.init(dropdownElement);
   }, []);
 
   return (
-    <a
-      className="dropdown-trigger"
-      href="#!"
-      data-target="dropdown1"
-    >
-      <Icon baseClassName="fas" color="primary" />
+    <a className="dropdown-trigger" href="#!" data-target="dropdown1">
+      <Icon2 baseClassName="fas" color="primary" />
     </a>
   );
 }
 
 function Navbar() {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [cartData, setCartData] = useState({});
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -81,49 +80,68 @@ function Navbar() {
     window.location.replace("/");
   };
 
-  const userId = Auth.getToken();
+  const userId = Auth.loggedIn() ? Auth.getProfile().data._id : null;
+ 
+  const {
+    data,
+    loading,
+    error
+  } = useQuery(GET_CART, {
+    variables: { userId: userId },
+    skip: !userId,
+  });
+
+  useEffect(() => {
+    if (data && data.userCart) {
+      setCartData(data.userCart)
+      console.log(cartData)
+    }
+  }, [data]);
+
+  const cartTotal = cartData.length
+  console.log(cartTotal);
+  
 
   return (
     <>
       <ul id="dropdown1" className="dropdown-content">
         <li className="divider"></li>
         <li>
-          <Link to='/market'>
-          <h5 >Market</h5>
+          <Link to="/market">
+            <h5>Market</h5>
           </Link>
         </li>
         <li className="divider"></li>
         <li>
-          <Link to='/about'>
-          <h5>About</h5>
+          <Link to="/about">
+            <h5>About</h5>
           </Link>
         </li>
         {Auth.loggedIn() ? (
-                <li >
-                  <Link to={`/profile/${userId}`}>
-                    <h5>
-                      Profile
-                    </h5>
-                  </Link>
-                </li>
-              ) : (
-                <li>
-                  <Link to="/login">
-                    <h5>
-                      Login
-                    </h5>
-                  </Link>
-                </li>
-              )}
-              {Auth.loggedIn() && (
-                <li>
-                  <a onClick={logout}>
-                    <h5>
-                      Logout
-                    </h5>
-                  </a>
-                </li>
-              )}
+          <li>
+            <Link to={`/profile/${userId}`}>
+              <h5>Profile</h5>
+            </Link>
+          </li>
+        ) : (
+          <li>
+            <Link to="/login">
+              <h5>Login</h5>
+            </Link>
+          </li>
+        )}
+        <li>
+          <Link to="/checkout">
+            <h5>Cart</h5>
+          </Link>
+        </li>
+        {Auth.loggedIn() && (
+          <li>
+            <a onClick={logout}>
+              <h5>Logout</h5>
+            </a>
+          </li>
+        )}
       </ul>
 
       {isSmallScreen ? (
@@ -188,6 +206,13 @@ function Navbar() {
                   </a>
                 </li>
               )}
+              <li style={styles.li}>
+                <Link className="text-dark glow" to="/checkout">
+                  <h3 style={{ fontSize: "1", fontWeight: "700" }}></h3>
+                  <Icon />
+                  <span>({cartTotal})</span>
+                </Link>
+              </li>
             </ul>
           </div>
         </nav>

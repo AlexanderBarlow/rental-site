@@ -21,7 +21,10 @@ const profileSchema = new Schema({
     type: Schema.Types.ObjectId, 
     ref: 'Item'
   }],
-    
+  cart: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Item'
+  }],
   rentedItems:[{
     type: Schema.Types.ObjectId,
     ref:'Item'

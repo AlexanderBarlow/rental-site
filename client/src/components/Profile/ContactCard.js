@@ -53,14 +53,14 @@ function MainFeaturedPost(props) {
             <Box
               sx={{
                 position: 'relative',
-                p: { xs: 3, md: 6 },
+                p: { xs: 2, md: 6 }, // Adjust padding for smaller screens
                 pr: { md: 0 },
               }}
             >
-              <Typography component="h1" variant="h3" color="inherit" gutterBottom>
+              <Typography component="h1" variant="h3" color="inherit" gutterBottom sx={{ fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } }}>
                 {userData.email}
               </Typography>
-              <Typography variant="h5" color="inherit" paragraph>
+              <Typography variant="h5" color="inherit" paragraph sx={{ fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' } }}>
                 {userData.city}
               </Typography>
             </Box>
