@@ -130,11 +130,13 @@ function Navbar() {
             </Link>
           </li>
         )}
-        <li>
+        {Auth.loggedIn() && (
+          <li>
           <Link to="/checkout">
             <h5>Cart</h5>
           </Link>
         </li>
+        )}
         {Auth.loggedIn() && (
           <li>
             <a onClick={logout}>
@@ -206,6 +208,7 @@ function Navbar() {
                   </a>
                 </li>
               )}
+              {Auth.loggedIn() && (
               <li style={styles.li}>
                 <Link className="text-dark glow" to="/checkout">
                   <h3 style={{ fontSize: "1", fontWeight: "700" }}></h3>
@@ -213,6 +216,7 @@ function Navbar() {
                   <span>({cartTotal})</span>
                 </Link>
               </li>
+              )}
             </ul>
           </div>
         </nav>
