@@ -9,6 +9,8 @@ import { useQuery } from "@apollo/client";
 import { GET_CART } from "../../utils/queries";
 import Auth from "../../utils/auth";
 import { useState, useEffect } from "react";
+import { Button } from '@mui/material';
+import { Form, Link } from 'react-router-dom';
 
 const styles = {
   bgcolor: {
@@ -48,6 +50,8 @@ function Cart() {
     }
   }, [data]);
 
+  console.log(data);
+
   const theme = createTheme();
 
   if (loading) {
@@ -62,6 +66,7 @@ function Cart() {
     <Box sx={{...styles.bgcolor, display: "flex", alignItems: "center", justifyContent: "center"}}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <form>
         <Container maxWidth="md">
           <Paper sx={{ ...styles.paper }}>
             <Typography component="h2" variant="h5" color="textPrimary" gutterBottom>
@@ -81,8 +86,12 @@ function Cart() {
                 ${cartTotal}
               </Typography>
             </Box>
+           
+            <Button variant="contained" style={{marginTop: "20px"}} className="glow" type='submit'>Checkout</Button>
+            
           </Paper>
         </Container>
+        </form>
       </ThemeProvider>
     </Box>
   );

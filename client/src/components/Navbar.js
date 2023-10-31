@@ -8,6 +8,7 @@ import M from "materialize-css";
 import { useQuery } from "@apollo/client";
 import { GET_CART } from "../utils/queries";
 import Icon2 from "@mui/icons-material/Menu";
+import { GET_CREDITS } from "../utils/queries";
 
 const styles = {
   color: {
@@ -61,6 +62,7 @@ function Navbar() {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [cartTotal, setCartTotal] = useState(0);
   const [cartData, setCartData] = useState(null);
+  const [credits, setCredits] = useState(0);
 
   const userId = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
@@ -68,6 +70,21 @@ function Navbar() {
     variables: { userId },
     skip: !userId,
   });
+
+  const { loading: creditLoading, data: creditData } = useQuery(GET_CREDITS, {
+    variables: { userId },
+    skip: !userId,
+  });
+
+  console.log(creditData);
+
+  useEffect(() => {
+    if(creditData && creditData.userCredits) {
+      setCredits(creditData.userCredits.amount)
+      console.log(creditData.userCredits.amount);
+    }
+  }, [creditData]);
+
 
   useEffect(() => {
     if (data && data.userCart) {
@@ -96,6 +113,10 @@ function Navbar() {
   };
 
   if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if(creditLoading) {
     return <div>Loading...</div>;
   }
 
@@ -214,6 +235,14 @@ function Navbar() {
                     <Icon />
                     <span>({cartTotal})</span>
                   </Link>
+                </li>
+              )}
+              {Auth.loggedIn() && (
+                <li style={styles.li}>
+                  <Link className="text-dark glow" to="/addcredits">
+                    <h3 style={{ fontSize: "1", fontWeight: "700" }}></h3>
+                    <span>${credits}</span>
+                    </Link>
                 </li>
               )}
             </ul>

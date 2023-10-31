@@ -8,7 +8,10 @@ const typeDefs = gql`
     password: String!
     rentable_items: [Item]
     cart: [Item]
+    transactions: [Transaction]
+    credits: [Credit]
   }
+
   type Item {
     _id: ID
     itemName: String
@@ -19,6 +22,7 @@ const typeDefs = gql`
     city: String
     availability: Boolean
   }
+
   type Address {
     streetName: String!
     city: String!
@@ -32,18 +36,43 @@ const typeDefs = gql`
     state: String!
     zip: String!
   }
+
   type Auth {
     token: ID
     profile: Profile
   }
+
+  type Transaction {
+    _id: ID
+    userId: ID
+    type: String
+    amount: Float
+    description: String
+    timestamp: String
+  }
+
+  type Credit {
+    _id: ID
+    userId: ID
+    amount: Float
+    transactions: [Transaction]
+  }
+
   type Query {
     profiles: [Profile]
     profile(profileId: ID!): Profile
     items: [Item]
     item(itemId: ID!): Item
     rentable_items(profileId: ID!): [Item]
-    userCart(userId: ID!): [Item]  # New query to get user's cart
+    userCart(userId: ID!): [Item]
+    transactions(userId: ID!): [Transaction] # Query to get user's transactions
+    userCredits(userId: ID!): Credit # Query to get user's credit details
   }
+
+  type CheckoutSession {
+    sessionUrl: String
+  }
+
   type Mutation {
     addProfile(email: String!, password: String!, city: String!): Auth
     removeProfile(profileId: ID): Profile
@@ -58,6 +87,9 @@ const typeDefs = gql`
     removeItem(_id: ID!): Item
     updateItemAvailability(_id: ID!): Item
     addItemToCart(userId: ID!, itemId: ID!): Profile
+    addCreditToUser(userId: ID!, amount: Float!): Credit
+    removeCreditFromUser(userId: ID!, amount: Float!): Credit
+    createCheckoutSession(quantity: Int!): CheckoutSession
   }
 `;
 

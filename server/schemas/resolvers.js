@@ -1,6 +1,9 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Profile, Item } = require("../models");
+const { Profile, Item, Transaction, Credit } = require("../models");
 const { signToken } = require("../utils/auth");
+const stripe = require("stripe")(
+  "sk_test_51O7IoFLUpmQeQeIcBQHzWoFnFSNPle6Xn8v2SggxRMHIhQivWlMTHyFHHArjKRr6FNTFLV7bDTRKM1UKl9Fe8sjH00FWbcuhwt"
+);
 
 const resolvers = {
   Query: {
@@ -19,25 +22,37 @@ const resolvers = {
     },
     rentable_items: async (parent, { profileId }) => {
       try {
-        const user = await Profile.findOne({ _id: profileId }).populate('rentable_items');
-  
+        const user = await Profile.findOne({ _id: profileId }).populate(
+          "rentable_items"
+        );
+
         if (!user) {
           throw new Error("User not found");
         }
-  
+
         return user.rentable_items; // This should be populated correctly.
       } catch (error) {
         throw new Error("Error fetching rentable items: " + error.message);
       }
     },
     userCart: async (parent, { userId }) => {
-      const user = await Profile.findOne({ _id: userId }).populate('cart');
-  
+      const user = await Profile.findOne({ _id: userId }).populate("cart");
+
       if (!user) {
         throw new Error("User not found");
       }
-  
+
       return user.cart;
+    },
+    transactions: async (parent, { userId }) => {
+      const userTransactions = await Transaction.find({ userId });
+      return userTransactions;
+    },
+    userCredits: async (parent, { userId }) => {
+      const userCredits = await Credit.findOne({ userId }).populate(
+        "transactions"
+      );
+      return userCredits;
     },
   },
 
@@ -56,7 +71,9 @@ const resolvers = {
       const profile = await Profile.findOne({ email });
 
       if (!profile) {
-        throw new AuthenticationError("No profile found with this email address");
+        throw new AuthenticationError(
+          "No profile found with this email address"
+        );
       }
 
       const correctPw = await profile.isCorrectPassword(password);
@@ -70,7 +87,11 @@ const resolvers = {
       return { token, profile };
     },
 
-    addItem: async (parent, { itemName, description, itemPrice, city }, context) => {
+    addItem: async (
+      parent,
+      { itemName, description, itemPrice, city },
+      context
+    ) => {
       if (!context.user) {
         throw new AuthenticationError("Authentication required");
       }
@@ -114,7 +135,7 @@ const resolvers = {
     removeItem: async (parent, { _id }) => {
       return await Item.findOneAndRemove({ _id });
     },
-    
+
     updateItemAvailability: async (parent, { _id }) => {
       const updatedItem = await Item.findOneAndUpdate(
         { _id },
@@ -142,8 +163,77 @@ const resolvers = {
       await user.save(); // Save the changes to the user
 
       return user;
-    }
-  }
+    },
+
+    addCreditToUser: async (parent, { userId, amount }) => {
+      const newTransaction = await Transaction.create({
+        userId,
+        type: "credit_purchase",
+        amount,
+        description: "Added credits to user account.",
+        timestamp: new Date().toISOString(),
+      });
+
+      const userCredit = await Credit.findOneAndUpdate(
+        { userId },
+        {
+          $inc: { amount }, // Increment the user's credit amount
+          $push: { transactions: newTransaction._id }, // Add the transaction reference
+        },
+        { new: true, upsert: true }
+      );
+
+      return userCredit;
+    },
+
+    removeCreditFromUser: async (parent, { userId, amount }) => {
+      const newTransaction = await Transaction.create({
+        userId,
+        type: "debit",
+        amount,
+        description: "Deducted credits from user account.",
+        timestamp: new Date().toISOString(),
+      });
+
+      const userCredit = await Credit.findOneAndUpdate(
+        { userId },
+        {
+          $inc: { amount: -amount }, // Decrement the user's credit amount
+          $push: { transactions: newTransaction._id }, // Add the transaction reference
+        },
+        { new: true, upsert: true }
+      );
+
+      return userCredit;
+    },
+    createCheckoutSession: async (_, { quantity }, { req, res }) => {
+      try {
+        const creditPrice = 100; // Assuming the price is 100 cents (or $1)
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ["card"],
+          line_items: [
+            {
+              price_data: {
+                currency: "usd",
+                product_data: {
+                  name: "Credits",
+                },
+                unit_amount: creditPrice * quantity, // Multiply the price by the selected quantity
+              },
+              quantity: 1, // Quantity is always 1 as Stripe supports one-time checkout
+            },
+          ],
+          mode: "payment",
+          success_url: "http://localhost:3001?success=true", // Define your success URL
+          cancel_url: "http://localhost:3001?cancel=true", // Define your cancel URL
+        });
+
+        return { sessionUrl: session.url };
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+  },
 };
 
 module.exports = resolvers;

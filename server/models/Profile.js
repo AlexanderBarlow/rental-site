@@ -29,6 +29,14 @@ const profileSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref:'Item'
   }],
+  transactions: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Transaction'
+  }],
+  credits: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Credit'
+  }],
 });
 
 profileSchema.pre('save', async function (next) {

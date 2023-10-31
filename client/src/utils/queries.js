@@ -78,3 +78,11 @@ query Items($userId: ID!) {
   }
 } 
 `;
+
+export const GET_CREDITS = gql`
+query Query($userId: ID!) {
+  userCredits(userId: $userId) {
+    amount
+  }
+}
+`
