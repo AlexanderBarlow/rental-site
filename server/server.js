@@ -3,8 +3,9 @@ const { ApolloServer } = require("apollo-server-express");
 const path = require("path");
 const { authMiddleware } = require("./utils/auth");
 const stripe = require("stripe")(
-  "sk_test_51O7IoFLUpmQeQeIcBQHzWoFnFSNPle6Xn8v2SggxRMHIhQivWlMTHyFHHArjKRr6FNTFLV7bDTRKM1UKl9Fe8sjH00FWbcuhwt"
+  process.env.secret_api
 );
+const env = require("dotenv").config();
 
 const Credit = require("./models/Credits");
 
