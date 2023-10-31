@@ -3,115 +3,89 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AddressForm from './AddressForm';
-import PaymentForm from './PaymentForm';
-import Review from './Review';
+import { useQuery } from "@apollo/client";
+import { GET_CART } from "../../utils/queries";
+import Auth from "../../utils/auth";
+import { useState, useEffect } from "react";
 
 const styles = {
-  container: {
-      boxShadow: '5px 10px 10px #00A6FB',
-      background: '#051923',
-      border: '10px solid black',
-      marginTop: '30px',
+  bgcolor: {
+    background: "#003554",
+    height: "100vh",
   },
-}
+  paper: {
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  },
+  item: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    margin: '10px 0',
+  },
+};
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://github.com/AlexanderBarlow/rental-site">
-        NestEase
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+function Cart() {
+  const [cartData, setCartData] = useState([]);
+  const [cartTotal, setCartTotal] = useState(0);
 
-const steps = ['Enter your information', 'Review your order', 'Rent/Purchase items'];
+  const userId = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <Review />;
-    case 2:
-      return <PaymentForm />;
-    default:
-      throw new Error('Unknown step');
+  const { loading, data, error } = useQuery(GET_CART, {
+    variables: { userId },
+    skip: !userId,
+  });
+
+  useEffect(() => {
+    if (data && data.userCart) {
+      setCartData(data.userCart);
+
+      const prices = data.userCart.map((item) => parseFloat(item.itemPrice));
+      const total = prices.reduce((acc, price) => acc + price, 0);
+      setCartTotal(total);
+    }
+  }, [data]);
+
+  const theme = createTheme();
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
-}
 
-const theme = createTheme();
-
-export default function Checkout() {
-  const [activeStep, setActiveStep] = React.useState(0);
-
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
+  if (error) {
+    return <div>Error! {error.message}</div>;
+  }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container style={styles.container} component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-          <Typography component="h1" variant="h4" align="center">
-            Checkout
-          </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          {activeStep === steps.length ? (
-            <React.Fragment>
-              <Typography variant="h5" gutterBottom>
-                Thank you for your order.
-              </Typography>
-              <Typography variant="subtitle1">
-                We have emailed your the owner about your rental request. Contact them 
-                to finish the rental process on the item. 
-              </Typography>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              {getStepContent(activeStep)}
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                    Back
-                  </Button>
-                )}
-
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
-                >
-                  {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                </Button>
+    <Box sx={{...styles.bgcolor, display: "flex", alignItems: "center", justifyContent: "center"}}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Container maxWidth="md">
+          <Paper sx={{ ...styles.paper }}>
+            <Typography component="h2" variant="h5" color="textPrimary" gutterBottom>
+              Your Cart Summary
+            </Typography>
+            {cartData.map((item) => (
+              <Box key={item.id} sx={styles.item}>
+                <Typography>{item.itemName}</Typography>
+                <Typography>${item.itemPrice}</Typography>
               </Box>
-            </React.Fragment>
-          )}
-        </Paper>
-        <Copyright />
-      </Container>
-    </ThemeProvider>
+            ))}
+            <Box sx={{ ...styles.item, borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+              <Typography variant="h6" color="textPrimary">
+                Total:
+              </Typography>
+              <Typography variant="h6" color="textPrimary">
+                ${cartTotal}
+              </Typography>
+            </Box>
+          </Paper>
+        </Container>
+      </ThemeProvider>
+    </Box>
   );
 }
+
+export default Cart;

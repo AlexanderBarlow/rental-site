@@ -59,7 +59,22 @@ function DropdownTrigger() {
 
 function Navbar() {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [cartData, setCartData] = useState({});
+  const [cartTotal, setCartTotal] = useState(0);
+  const [cartData, setCartData] = useState(null);
+
+  const userId = Auth.loggedIn() ? Auth.getProfile().data._id : null;
+
+  const { loading, data } = useQuery(GET_CART, {
+    variables: { userId },
+    skip: !userId,
+  });
+
+  useEffect(() => {
+    if (data && data.userCart) {
+      setCartTotal(data.userCart.length);
+      setCartData(data.userCart);
+    }
+  }, [data]);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -80,27 +95,9 @@ function Navbar() {
     window.location.replace("/");
   };
 
-  const userId = Auth.loggedIn() ? Auth.getProfile().data._id : null;
- 
-  const {
-    data,
-    loading,
-    error
-  } = useQuery(GET_CART, {
-    variables: { userId: userId },
-    skip: !userId,
-  });
-
-  useEffect(() => {
-    if (data && data.userCart) {
-      setCartData(data.userCart)
-      console.log(cartData)
-    }
-  }, [data]);
-
-  const cartTotal = cartData.length
-  console.log(cartTotal);
-  
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -131,11 +128,13 @@ function Navbar() {
           </li>
         )}
         {Auth.loggedIn() && (
-          <li>
-          <Link to="/checkout">
-            <h5>Cart</h5>
-          </Link>
-        </li>
+          <li style={styles.li}>
+            <Link className="text-dark glow" to="/checkout">
+              <h3 style={{ fontSize: "1", fontWeight: "700" }}></h3>
+              <Icon />
+              <span>({cartTotal})</span>
+            </Link>
+          </li>
         )}
         {Auth.loggedIn() && (
           <li>
@@ -209,13 +208,13 @@ function Navbar() {
                 </li>
               )}
               {Auth.loggedIn() && (
-              <li style={styles.li}>
-                <Link className="text-dark glow" to="/checkout">
-                  <h3 style={{ fontSize: "1", fontWeight: "700" }}></h3>
-                  <Icon />
-                  <span>({cartTotal})</span>
-                </Link>
-              </li>
+                <li style={styles.li}>
+                  <Link className="text-dark glow" to="/checkout">
+                    <h3 style={{ fontSize: "1", fontWeight: "700" }}></h3>
+                    <Icon />
+                    <span>({cartTotal})</span>
+                  </Link>
+                </li>
               )}
             </ul>
           </div>
