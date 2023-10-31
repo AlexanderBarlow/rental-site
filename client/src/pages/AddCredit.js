@@ -12,7 +12,7 @@ const ADD_CREDITS = gql`
 
 const AddCredit = () => {
   const [quantity, setQuantity] = useState(1);
-  const isLargeScreen = useMediaQuery('(min-width:960px)');
+  const isLargeScreen = useMediaQuery('sm');
 
   const [createCheckoutSession] = useMutation(ADD_CREDITS);
 
@@ -44,7 +44,7 @@ const AddCredit = () => {
       width: 400,
       margin: 'auto',
       textAlign: 'center',
-      height: isLargeScreen ? '100vh' : '100%', // Adjusting height based on screen size
+      height: isLargeScreen ? '100vh' : '100vh', // Adjusting height based on screen size
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
