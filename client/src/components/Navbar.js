@@ -90,41 +90,46 @@ function Navbar() {
     transformOrigin={{ vertical: "top", horizontal: "right" }}
     open={Boolean(mobileMenuOpen)}
     onClose={handleMobileMenuClose} // Use the close function here
+    PaperProps={{
+      style: {
+        background: "#051923", // Set your desired background color here
+      }
+    }}
   >
- <MenuItem component={Link} to="/market" onClick={handleLinkClick}>
+ <MenuItem component={Link} to="/market" onClick={handleLinkClick} sx={{color: "#FFF"}}>
         Market
       </MenuItem>
       <Divider />
-      <MenuItem component={Link} to="/about" onClick={handleLinkClick}>
+      <MenuItem component={Link} to="/about" onClick={handleLinkClick} sx={{color: "#FFF"}}>
         About
       </MenuItem>
       <Divider />
       {Auth.loggedIn() ? (
-        <MenuItem component={Link} to={`/profile/${userId}`} onClick={handleLinkClick}>
+        <MenuItem component={Link} to={`/profile/${userId}`} onClick={handleLinkClick} sx={{color: "#FFF"}}>
           Profile
         </MenuItem>
       ) : (
-        <MenuItem component={Link} to="/login" onClick={handleLinkClick}>
+        <MenuItem component={Link} to="/login" onClick={handleLinkClick} sx={{color: "#FFF"}}>
           Login
         </MenuItem>
       )}
       <Divider />
       {Auth.loggedIn() && (
-        <MenuItem component={Link} to="/checkout" onClick={handleLinkClick}>
-          <Typography>
+        <MenuItem component={Link} to="/checkout" onClick={handleLinkClick} sx={{color: "#FFF"}}>
+          <Typography sx={{color: "#FFF"}}>
             <Icon /> ({cartTotal})
           </Typography>
         </MenuItem>
       )}
       <Divider />
       {Auth.loggedIn() && (
-        <MenuItem component={Link} to="/addcredits" onClick={handleLinkClick}>
+        <MenuItem component={Link} to="/addcredits" onClick={handleLinkClick} sx={{color: "#FFF"}}>
           ${credits}
         </MenuItem>
       )}
       <Divider />
       {Auth.loggedIn() && (
-        <MenuItem onClick={() => {
+        <MenuItem sx={{color: "#FFF"}} onClick={() => {
           logout();
           handleLinkClick();
         }}>
@@ -135,10 +140,10 @@ function Navbar() {
   );
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{background: "#051923"}}>
       <Toolbar>
         <img src={LOGO} alt="logo" style={{ height: "50px", width: "50px", padding: "2px" }} />
-        <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: "none", color: "inherit", paddingLeft: "10px" }}>
+        <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: "none", color: "inherit", paddingLeft: "20px" }}>
           NestEase
         </Typography>
         {isMobile ? (
@@ -155,35 +160,35 @@ function Navbar() {
           </>
         ) : (
           <div>
-            <Typography component={Link} to="/market" variant="h6" sx={{ marginRight: "10px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
+            <Typography component={Link} to="/market" variant="h6" sx={{ marginRight: "20px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
               Market Place
             </Typography>
-            <Typography component={Link} to="/about" variant="h6" sx={{ marginRight: "10px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
+            <Typography component={Link} to="/about" variant="h6" sx={{ marginRight: "20px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
               About
             </Typography>
             {Auth.loggedIn() ? (
-              <Typography component={Link} to={`/profile/${userId}`} variant="h6" sx={{ marginRight: "10px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
+              <Typography component={Link} to={`/profile/${userId}`} variant="h6" sx={{ marginRight: "20px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
                 Profile
               </Typography>
             ) : (
-              <Typography component={Link} to="/login" variant="h6" sx={{ marginRight: "10px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
+              <Typography component={Link} to="/login" variant="h6" sx={{ marginRight: "20px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
                 Login
               </Typography>
             )}
             {Auth.loggedIn() && (
-              <Typography component={Link} to="/checkout" variant="h6" sx={{ marginRight: "10px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
+              <Typography component={Link} to="/checkout" variant="h6" sx={{ marginRight: "20px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
                 <Badge badgeContent={cartTotal} color="secondary">
                   <Icon />
                 </Badge>
               </Typography>
             )}
             {Auth.loggedIn() && (
-              <Typography component={Link} to="/addcredits" variant="h6" sx={{ marginRight: "10px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
+              <Typography component={Link} to="/addcredits" variant="h6" sx={{ marginRight: "20px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
                 ${credits}
               </Typography>
             )}
             {Auth.loggedIn() && (
-              <Typography component={Link} to="/" onClick={logout} variant="h6" sx={{ marginRight: "10px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
+              <Typography component={Link} to="/" onClick={logout} variant="h6" sx={{ marginRight: "20px", fontWeight: "600", textDecoration: "none", color: "inherit" }}>
                 Logout
               </Typography>
             )}
