@@ -18,6 +18,9 @@ import LOGO from "../images/logo.png";
 import { Container, Grid } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStripe } from "@fortawesome/free-brands-svg-icons";
+import picOne from '../images/Checkout-social-card.png';
+import picTwo from '../images/express_checkout_ce31841eb7.png';
+import picThree from '../images/how-to-make-money-online.jpg';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -34,22 +37,22 @@ const cardData = [
   {
     id: 1,
     title: "Stripe",
-    description: "Stripe is a payment processing platform with many features and security",
-    image: LOGO,
+    description: "Stripe is a payment processing platform with many features and security. It offers fast checkouts securely.",
+    image: picOne,
     avatar: <FontAwesomeIcon icon={faStripe} />
   },
   {
     id: 2,
     title: "Tokens",
-    description: "Our tokens add uniqueness to our marketplace! PPPPPPPP",
-    image: LOGO,
+    description: "Our tokens add uniqueness to our marketplace! It makes it easy to buy and sell items.",
+    image: picTwo,
     avatar: <FontAwesomeIcon icon={faStripe} />
   },
   {
     id: 3,
     title: "Withdrawals",
-    description: "Stripe is a payment processing platform hjgkhjgjgjghjgjjhgjhghjg",
-    image: LOGO,
+    description: "Currently our withdrawal system is in development. But, be ready to cashout all that dough!",
+    image: picThree,
     avatar: <FontAwesomeIcon icon={faStripe} />
   },
 ];
@@ -76,7 +79,7 @@ export default function Features({ id }) {
               <CardMedia
                 component="img"
                 height="194"
-                image={LOGO}
+                image={card.image}
                 alt="Paella dish"
               />
               <CardContent>
