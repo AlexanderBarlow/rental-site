@@ -54,7 +54,7 @@ const cardData = [
   },
 ];
 
-export default function Features() {
+export default function Features({ id }) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -62,11 +62,11 @@ export default function Features() {
   };
 
   return (
-    <Container sx={{background: "#051923", width: "100%", minWidth: "100%", justifyContent: 'center'}}>
-      <Grid container spacing={2} justifyContent='center'>
+    <Container sx={{background: "#051923", width: "100%", minWidth: "100%", justifyContent: 'center', alignContent: 'center'}} id={id}>
+      <Grid container spacing={2} justifyContent='center' alignContent='center'>
         {cardData.map((card) => (
           <Grid item xs={12} sm={6} md={4} key={card.id}>
-            <Card sx={{ maxWidth: 400, width: "100%" }}>
+            <Card sx={{ maxWidth: 350, width: "100%" }}>
               <CardHeader
                 avatar={
                   card.avatar 

@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import backdropPic from '../images/3D Paths - Lines 1 - Copy@1-2560x1363.jpg';
 
-export default function Hero() {
+export default function Hero({ id }) {
     const backgroundStyle = {
         position: 'absolute',
         width: '100%',
@@ -17,7 +17,7 @@ export default function Hero() {
     return (
         <>
             <CssBaseline />
-            <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+            <Box sx={{ position: 'relative', overflow: 'hidden' }} id={id}>
                 <img src={backdropPic} alt="Background" style={backgroundStyle} />
                 <Container sx={{ position: 'relative', zIndex: 1 }}>
                     <Box
