@@ -1,6 +1,5 @@
 import React from "react";
-import "materialize-css/dist/css/materialize.min.css";
-import LOGO from "../images/logo.png";
+import { Link } from "react-scroll";
 import Hero from "../components/hero";
 import Features from "../components/features";
 import About from "../components/about";
@@ -68,14 +67,30 @@ export default function LandingPage() {
     <>
       <ul style={styles.nav}>
         <li>
-          <a href="#Why" style={styles.navItem}>
+          <Link
+            to="Why"
+            style={styles.navItem}
+            activeClass="active"
+            spy={true}
+            smooth={true}
+            offset={-70} // You can adjust the offset as needed
+            duration={500}
+          >
             Why us
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="#getStarted" style={styles.navItem}>
+          <Link
+            to="getStarted"
+            style={styles.navItem}
+            activeClass="active"
+            spy={true}
+            smooth={true}
+            offset={-70} // You can adjust the offset as needed
+            duration={500}
+          >
             Get Started
-          </a>
+          </Link>
         </li>
       </ul>
       <Hero />
