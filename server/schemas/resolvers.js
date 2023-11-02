@@ -225,8 +225,8 @@ const resolvers = {
             },
           ],
           mode: "payment",
-          success_url: "http://localhost:3001?success=true", // Define your success URL
-          cancel_url: "http://localhost:3001?cancel=true", // Define your cancel URL
+          success_url: "http://localhost:3000/market", // Define your success URL
+          cancel_url: "http://localhost:3000/", // Define your cancel URL
         });
 
         return { sessionUrl: session.url };
