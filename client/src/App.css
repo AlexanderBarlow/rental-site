@@ -5,6 +5,10 @@
   height: 100%;
 } */
 
+.body{
+  margin: 0;
+}
+
 .App {
   text-align: center;
 }

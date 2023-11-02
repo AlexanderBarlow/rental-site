@@ -5,7 +5,7 @@ import "./styles/glow.css";
 
 const styles = {
   color: {
-    background: "#051923",
+    background: "#006494",
     height: "100%",
   },
   img: {

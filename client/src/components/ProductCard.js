@@ -14,35 +14,40 @@ function Product({ item }) {
   const [updateItemAvailability] = useMutation(UPDATE_ITEM_AVAILABILITY);
   const [addItemToCart] = useMutation(ADD_ITEM_TO_CART);
 
-  const user = Auth.getProfile().data._id;
+  const user = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
   const rented = async (event) => {
     event.preventDefault();
     if (item.availability) {
-      await updateItemAvailability({
-        variables: {
-          _id: item._id,
-        },
-      });
+      try {
+        await updateItemAvailability({
+          variables: {
+            _id: item._id,
+          },
+        });
 
-      await addItemToCart({
-        variables: {
-          itemId: item._id,
-          userId: user,
-        },
-      });
+        await addItemToCart({
+          variables: {
+            itemId: item._id,
+            userId: user,
+            skip: !user,
+          },
+        });
+      } catch (error) {
+        console.error("An error occurred while processing the request:", error);
+        // Handle error, show a message, etc.
+      }
     }
   };
 
   const styles = {
     bgcolor: {
-      background: "#003554",
+      background: "#006494",
     },
     font: {
       fontFamily: "Times New Roman",
     },
     border: "5px solid black",
-    boxShadow: "5px 10px 10px #00A6FB",
     marginBottom: "30px",
     borderRadius: "10px",
     btn: {

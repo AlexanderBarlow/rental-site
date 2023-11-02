@@ -13,7 +13,7 @@ const theme = createTheme();
 
 const styles = {
   background: {
-    background: "#006494",
+    background: "#051923",
     display: "flex",
     justifyContent: "center",
     alignItems: "start",
@@ -56,7 +56,7 @@ const Product = () => {
                 component="h1"
                 variant="h2"
                 align="center"
-                color="text.primary"
+                color="#FFF"
                 gutterBottom
               >
                 Market Place
@@ -64,7 +64,7 @@ const Product = () => {
               <Typography
                 variant="h5"
                 align="center"
-                color="text.secondary"
+                color="#FFF"
                 paragraph
               >
                 Discover rental products!

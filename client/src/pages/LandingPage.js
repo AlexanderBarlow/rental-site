@@ -1,6 +1,10 @@
 import React from "react";
 import 'materialize-css/dist/css/materialize.min.css';
 import LOGO from "../images/logo.png";
+import Hero from "../components/hero";
+import Features from "../components/features";
+import About from "../components/about";
+
 
 
 const styles = {
@@ -10,9 +14,8 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: '100vh',
-    padding: '20px',
-    width: '100%',
-    background: "#006494",
+    background: "inherit",
+    width: "fit-content",
   },
   content: {
     textAlign: 'center',
@@ -41,17 +44,10 @@ const styles = {
 
 export default function LandingPage() {
   return (
-    <div style={styles.container}>
-      <div id="card" style={styles.content}>
-        <img src={LOGO} alt='logo' style={styles.img}></img>
-        <div style={styles.imgContainer}>
-          <p style={styles.text}>
-            Login or Sign up to rent products or services near you! Want to start
-            making some extra dough! You too can add your items to the marketplace.
-          </p>
-          <img src='Hotpot.png' alt='' style={styles.img}></img>
-        </div>
-      </div>
-    </div>
+    <>
+    <Hero />
+    <Features />
+    <About />
+    </>
   );
 }
