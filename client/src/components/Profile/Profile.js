@@ -81,7 +81,6 @@ const styles = {
     justifyContent: "center",
     alignItems: "start",
     minHeight: "100vh",
-    width: "10",
     paddingBottom: "50px",
   },
   container: {
@@ -134,17 +133,17 @@ export default function Blog() {
     <div style={styles.background}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <main>
-          <ContactCard
+        <ContactCard
             post={{
               image: "https://source.unsplash.com/random",
             }}
             style={{ margin: "20px auto" }}
           />
+        <main>
         
               <div style={styles.center}>
               <Link to="/addproduct">
-                <Button variant="contained" style={styles.btn} className="glow">
+                <Button variant="outlined" style={styles.btn} className="glow">
                   Add your Product!
                 </Button>
                 </Link>

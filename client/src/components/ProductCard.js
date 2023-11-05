@@ -93,7 +93,7 @@ function Product({ item }) {
   };
 
   return (
-    <Card sx={{ maxWidth: 345, bgcolor: "#006494" }}> 
+    <Card sx={{ maxWidth: 345, bgcolor: "#006494", flex: "0 0 100%", margin: "2%" }}> 
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: red[500] }}>

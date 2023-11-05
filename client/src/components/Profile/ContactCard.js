@@ -36,7 +36,7 @@ function MainFeaturedPost(props) {
 
   if (userData) {
     return (
-      <Container sx={{width: '100%', justifyContent: 'center', padding: '0 7%'}}>
+      <Container sx={{width: '100%', }}>
       <Paper
         sx={{
           position: 'relative',
