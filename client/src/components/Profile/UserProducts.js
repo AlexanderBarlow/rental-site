@@ -1,20 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { useQuery } from '@apollo/client';
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Collapse from '@mui/material/Collapse';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import { QUERY_ITEMS } from '../../utils/queries';
 import Auth from '../../utils/auth';
 import { GetItemDetails } from '../../utils/queries';
 
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
 function FeaturedPost({ item }) {
   const auth = Auth.getProfile();
   const ID = auth.data._id;
+
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+  
 
   const { data, loading, error } = useQuery(QUERY_ITEMS, {
     variables: { profileId: ID },
@@ -67,33 +96,49 @@ function FeaturedPost({ item }) {
   if (!userData || userData.length === 0) {
     return <div>No Rentable Items</div>;
   }
-  
+
 
   return (
     <Grid item xs={12} md={6}>
       <CardActionArea style={styles} component="a" href="#">
-          <Card
-            style={styles.bgcolor}
-            sx={{ display: 'flex' }}
-          >
-            <CardContent sx={{ flex: 1 }}>
-              <Typography component="h2" variant="h5" color="white">
-                {itemData.itemName}
-              </Typography>
-              <Typography style={styles.font} variant="subtitle1" color="white">
-                {itemData.description}
-              </Typography>
-              <Typography variant="subtitle1" paragraph color="white">
-                ${itemData.itemPrice}
-              </Typography>
-            </CardContent>
-            <CardMedia
-              component="img"
-              sx={{ width: '150px', height: '150px', display: { xs: 'none', sm: 'block' } }}
-              image={img.image}
-              alt="alt text"
-            />
-          </Card>
+      <Card sx={{ maxWidth: 345, bgcolor: "#006494" }}> 
+    <CardHeader
+      avatar={
+        <Avatar sx={{ bgcolor: red[500] }}>
+          R
+        </Avatar>
+      }
+      title={item.itemName}
+      subheader={item.itemPrice}
+    />
+    <CardMedia
+      component="img"
+      height="194"
+      image={img.image}
+      alt="Paella dish"
+    />
+    <CardContent>
+      <Button variant="outlined" sx={{background: "#051923"}}>
+        Remove
+      </Button>
+    </CardContent>
+    <CardActions disableSpacing>
+      <ExpandMore
+        expand={expanded}
+        onClick={handleExpandClick}
+        aria-expanded={expanded}
+        aria-label="show more"
+      >
+        <ExpandMoreIcon />
+      </ExpandMore>
+    </CardActions>
+    <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <CardContent>
+        <Typography paragraph>Description:</Typography>
+        <Typography paragraph>{item.description}</Typography>
+      </CardContent>
+    </Collapse>
+  </Card>
       </CardActionArea>
     </Grid>
   );

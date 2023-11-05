@@ -37,6 +37,7 @@ query Rentable_items($profileId: ID!) {
     _id
     itemName
     itemPrice
+    description
   }
 }
 `;

@@ -30,8 +30,8 @@ export default function ProfilePage() {
 
   const dynamicStyles = {
     ...(mediumScreenStyles && {
-      height: "100vh",
-      width: "100vw",
+      height: "100%",
+      width: "100%",
       background: "#006494",
     }),
   };

@@ -20,6 +20,33 @@ import { GetItemDetails } from "../../utils/queries";
 import { useApolloClient } from "@apollo/client";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
+import CardHeader from "@mui/material/CardHeader";
+import CardActions from "@mui/material/CardActions";
+import Collapse from "@mui/material/Collapse";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import { red } from "@mui/material/colors";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Box from "@mui/material/Box";
+
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+const img = {
+  image: "https://source.unsplash.com/random",
+};
 
 const styles = {
   marginBottom: "50px",
@@ -31,12 +58,15 @@ const styles = {
   },
   center: {
     display: "flex",
+    flexDirection: "row",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    paddingBottom: "10px"
   },
   btn: {
-    fontSize: "1.25rem", 
-    fontWeight: "700", 
+    fontSize: "1.25rem",
+    fontWeight: "700",
     color: "#00A6FB",
     background: "#051923",
   },
@@ -44,37 +74,30 @@ const styles = {
   boxShadow: "5px 10px 10px #00A6FB",
   marginBottom: "30px",
   borderRadius: "10px",
-};
-
-const mainFeaturedPost = {
-  title: "@Username Here",
-  description: "City: Philadelphia, PA",
-  image: "https://source.unsplash.com/random",
-  imageText: "main image description",
-  linkText: "asdjklbf",
-};
-
-const featuredPosts = [
-  {
-    image:
-      "https://www.rd.com/wp-content/uploads/2022/08/lawnmower-GettyImages-1096126656-MLedit.jpg?resize=768,512",
+  footerHeight: "100px",
+  background: {
+    background: "#051923",
+    padding: "2%",
+    justifyContent: "center",
+    alignItems: "start",
+    minHeight: "100vh",
+    width: "10",
+    paddingBottom: "50px",
   },
-  {
-    image:
-      "https://contentgrid.homedepot-static.com/hdus/en_US/DTCCOMNEW/Articles/types-of-car-jacks-2022-hero.jpg",
+  container: {
+    maxWidth: "100%",
+    padding: "0 15px", // Add padding to maintain distance from the edges
+    margin: "0 auto", // Center the container
   },
-  {
-    image:
-      "https://www.troybilt.com/on/demandware.static/-/Sites-troybilt-Library/default/dwf34185d4/images/product-line-browse/series-feature-card/41AS99MS766_TB430_env5_492x350.jpg",
+  card: {
+    width: "100%", // Set default width to 100%
+    "@media (max-width: 800px)": {
+      width: "90%",
+      height: '100%',
+      minHeight: '100%',
+      padding: "0 15px", // Add padding to maintain distance from the edges
+    },
   },
-  {
-    image:
-      "https://www.verywellfamily.com/thmb/xFKeOxnoRogvhK_26nYG00rlqek=/1000x1000/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/_hero_SQ_Graco-4Ever-4-in-1-Convertible-Car-Seat-1-cc1b2ff4d0084bf2bd30b7d44ba33c1c.jpg",
-  },
-];
-
-const img = {
-  image: "https://source.unsplash.com/random",
 };
 
 const theme = createTheme();
@@ -94,68 +117,80 @@ export default function Blog() {
     if (data) {
       const rentData = data.rentable_items;
       console.log(rentData);
-  
-      // Assuming you want to set the showDetails to all items in rentData
+
       setShowDetails(rentData);
     }
   }, [data]);
 
   console.log(showDetails);
 
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container maxWidth="lg" >
+    <div style={styles.background}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
         <main>
-          <ContactCard post={mainFeaturedPost} />
-          <Link  to="/addproduct">
-        <div style={styles.center}>
-        <Button variant="contained" style={styles.btn} className="glow">
-          Add your Product!
-        </Button>
-        </div>
-      </Link>
-          <Grid className="container" spacing={5} sx={{ mt: 3 }}>
-            <Grid item xs={12} md={6}>
+          <ContactCard
+            post={{
+              image: "https://source.unsplash.com/random",
+            }}
+            style={{ margin: "20px auto" }}
+          />
+        
+              <div style={styles.center}>
+              <Link to="/addproduct">
+                <Button variant="contained" style={styles.btn} className="glow">
+                  Add your Product!
+                </Button>
+                </Link>
+              </div>
+           
+          <Container maxWidth="lg" style={styles.container} sx={{...styles.card}}>
+            <Grid container spacing={3}>
               {showDetails.map((item) => (
-              <CardActionArea style={styles} component="a" key={item._id}>
-                <Card
-                  style={styles.bgcolor}
-                  sx={{ display: "flex" }}
-                >
-                  <CardContent sx={{ flex: 1 }}>
-                    <Typography component="h2" variant="h5" color="white">
-                      {item.itemName}
-                    </Typography>
-                    <Typography
-                      style={styles.font}
-                      variant="subtitle1"
-                      color="white"
-                    >
-                      {item.description}
-                    </Typography>
-                    <Typography variant="subtitle1" paragraph color="white">
-                      ${item.itemPrice}
-                    </Typography>
-                  </CardContent>
-                  <CardMedia
-                    component="img"
-                    sx={{
-                      width: "150px",
-                      height: "150px",
-                      display: { xs: "none", sm: "block" },
-                    }}
-                    image={img.image}
-                    alt="alt text"
-                  />
-                </Card>
-              </CardActionArea>
+                <Grid item xs={12} sm={6} md={4} key={item._id}>
+                  <Card sx={{ bgcolor: "#006494",}}>
+                    <CardHeader
+                      avatar={<Avatar sx={{ bgcolor: red[500] }}>R</Avatar>}
+                      title={item.itemName}
+                      subheader={item.itemPrice}
+                    />
+                    <CardMedia
+                      component="img"
+                      height="250"
+                      image={img.image}
+                      alt="Product Image"
+                    />
+                    <CardContent>
+                      <Button variant="outlined" sx={{ background: "#051923" }}>
+                        Remove Item
+                      </Button>
+                    </CardContent>
+                    <CardActions disableSpacing>
+                      <Button
+                        onClick={handleExpandClick}
+                        sx={{ color: "white" }}
+                        endIcon={<ExpandMoreIcon />}
+                      ></Button>
+                    </CardActions>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                      <CardContent>
+                        <Typography paragraph>Description:</Typography>
+                        <Typography paragraph>{item.description}</Typography>
+                      </CardContent>
+                    </Collapse>
+                  </Card>
+                </Grid>
               ))}
             </Grid>
-          </Grid>
+          </Container>
         </main>
-      </Container>
-    </ThemeProvider>
+      </ThemeProvider>
+    </div>
   );
 }

@@ -19,6 +19,7 @@ const styles = {
     alignItems: "start",
     minHeight: "100vh",
     width: "100%",
+    paddingBottom: "50px",
   },
   container: {
     display: "flex",

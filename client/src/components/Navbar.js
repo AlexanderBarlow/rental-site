@@ -33,6 +33,21 @@ function Navbar() {
   const [cartData, setCartData] = useState(null);
   const [credits, setCredits] = useState(0);
 
+  const theme = useTheme();
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < theme.breakpoints.values.md);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, [theme.breakpoints.values.md]);
+
   const userId = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
   const { loading, data } = useQuery(GET_CART, {
@@ -172,25 +187,27 @@ function Navbar() {
 
   return (
     <AppBar position="static" style={{ background: "#051923", width: "100%" }}>
-      <Toolbar>
+    <Toolbar>
+      {!isMobile && (  // Conditional rendering of the logo for non-mobile devices
         <img
           src={LOGO}
           alt="logo"
           style={{ height: "50px", width: "50px", padding: "2px" }}
         />
-        <Typography
-          variant="h6"
-          component={Link}
-          to="/"
-          sx={{
-            flexGrow: 1,
-            textDecoration: "none",
-            color: "inherit",
-            paddingLeft: "20px",
-          }}
-        >
-          NestEase
-        </Typography>
+      )}
+      <Typography
+        variant="h6"
+        component={Link}
+        to="/"
+        sx={{
+          flexGrow: 1,
+          textDecoration: "none",
+          color: "inherit",
+          paddingLeft: isMobile ? "0" : "20px", // Adjust padding for mobile view
+        }}
+      >
+        NestEase
+      </Typography>
         {isMobile ? (
           <>
             <IconButton

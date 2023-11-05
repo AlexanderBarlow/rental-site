@@ -7,6 +7,7 @@ import Auth from '../../utils/auth';
 import { useQuery } from '@apollo/client';
 import { QUERY_SESSION_USER } from '../../utils/queries';
 import Box from '@mui/material/Box';
+import { Container } from '@mui/material';
 
 function MainFeaturedPost(props) {
   const { post } = props;
@@ -35,6 +36,7 @@ function MainFeaturedPost(props) {
 
   if (userData) {
     return (
+      <Container sx={{width: '100%', justifyContent: 'center', padding: '0 7%'}}>
       <Paper
         sx={{
           position: 'relative',
@@ -45,9 +47,11 @@ function MainFeaturedPost(props) {
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
           backgroundImage: `url(${post.image})`,
+          justifySelf: "center",
+          width: '100%',
+          padding: '0 2%',
         }}
       >
-        {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
         <Grid container>
           <Grid item md={6}>
             <Box
@@ -67,6 +71,7 @@ function MainFeaturedPost(props) {
           </Grid>
         </Grid>
       </Paper>
+      </Container>
     );
   } else {
     return <p>Loading...</p>;
