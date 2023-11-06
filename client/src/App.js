@@ -22,6 +22,7 @@ import About from './pages/About'
 import AddProduct from "./pages/AddProduct";
 import Stripe from "./pages/Stripe"
 import AddCreddit from "./pages/AddCredit"
+import EditProfile from "./pages/EditProfile"
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -60,6 +61,7 @@ function App() {
               <Route path="/addproduct" element={<AddProduct />} />
               <Route path="/stripe" element={<Stripe />} />
               <Route path="/addcredits" element={<AddCreddit />} />
+              <Route path="/editprofile" element={<EditProfile />} />
             </Routes>
           <Footer />
         

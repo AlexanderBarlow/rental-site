@@ -24,6 +24,9 @@ query profile($profileId: ID!) {
     profile(profileId: $profileId) {
       email
       city
+      username
+      backgroundImage
+      profileImage
       rentable_items {
         itemName
       }

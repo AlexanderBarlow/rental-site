@@ -32,6 +32,9 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Box from "@mui/material/Box";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
+import { faUserPen } from "@fortawesome/free-solid-svg-icons";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -60,7 +63,7 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     width: "100%",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
     paddingBottom: "10px"
   },
@@ -121,8 +124,6 @@ export default function Blog() {
     }
   }, [data]);
 
-  console.log(showDetails);
-
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -143,10 +144,11 @@ export default function Blog() {
         
               <div style={styles.center}>
               <Link to="/addproduct">
-                <Button variant="outlined" style={styles.btn} className="glow">
-                  Add your Product!
-                </Button>
-                </Link>
+              <FontAwesomeIcon icon={faSquarePlus} size="xl" />
+              </Link>
+              <Link to="/editprofile">
+              <FontAwesomeIcon icon={faUserPen} />
+              </Link>
               </div>
            
           <Container maxWidth="lg" style={styles.container} sx={{...styles.card}}>

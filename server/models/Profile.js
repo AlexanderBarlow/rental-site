@@ -8,6 +8,12 @@ const profileSchema = new Schema({
     unique: true,
     match: [/.+@.+\..+/, 'Must match an email address!'],
   },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
   password: {
     type: String,
     required: true,
@@ -16,6 +22,12 @@ const profileSchema = new Schema({
   city: {
     type: String,
     required: true,
+  },
+  profileImage: {
+    type: String, 
+  },
+  backgroundImage: {
+    type: String, 
   },
   rentable_items: [{
     type: Schema.Types.ObjectId, 

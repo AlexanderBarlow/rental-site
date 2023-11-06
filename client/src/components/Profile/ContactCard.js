@@ -23,8 +23,11 @@ function MainFeaturedPost(props) {
   useEffect(() => {
     if (data && data.profile) {
       setUserData(data.profile);
+      console.log(data.profile);
     }
   }, [data]);
+  console.log(userData)
+  console.log(data);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -46,7 +49,7 @@ function MainFeaturedPost(props) {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          backgroundImage: `url(${post.image})`,
+          backgroundImage: `${userData.backgroundImage}`,
           justifySelf: "center",
           width: '100%',
           padding: '0 2%',
@@ -62,7 +65,7 @@ function MainFeaturedPost(props) {
               }}
             >
               <Typography component="h1" variant="h3" color="inherit" gutterBottom sx={{ fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } }}>
-                {userData.email}
+                {userData.username}
               </Typography>
               <Typography variant="h5" color="inherit" paragraph sx={{ fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' } }}>
                 {userData.city}

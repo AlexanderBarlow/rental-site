@@ -4,7 +4,10 @@ const typeDefs = gql`
   type Profile {
     _id: ID
     email: String!
+    username: String!
     city: String!
+    profileImage: String
+    backgroundImage: String
     password: String!
     rentable_items: [Item]
     cart: [Item]
@@ -17,6 +20,7 @@ const typeDefs = gql`
     itemName: String
     description: String
     itemPrice: String
+    itemImage: String
     itemOwner: Profile
     itemRenter: Profile
     city: String
@@ -74,7 +78,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addProfile(email: String!, password: String!, city: String!): Auth
+    addProfile(email: String!, username: String! password: String!, city: String!): Auth
     removeProfile(profileId: ID): Profile
     login(email: String!, password: String!): Auth
     addItem(
@@ -82,6 +86,7 @@ const typeDefs = gql`
       description: String
       itemPrice: String!
       city: String!
+      itemImage: String
     ): Item
     rentItem(_id: ID!): Profile
     removeItem(_id: ID!): Item
@@ -90,6 +95,14 @@ const typeDefs = gql`
     addCreditToUser(userId: ID!, amount: Float!): Credit
     removeCreditFromUser(userId: ID!, amount: Float!): Credit
     createCheckoutSession(quantity: Int!): CheckoutSession
+    editProfile(
+      profileId: ID!,
+      username: String,
+      email: String,
+      city: String,
+      profileImage: String,
+      backgroundImage: String
+    ): Profile
   }
 `;
 

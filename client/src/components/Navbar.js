@@ -27,6 +27,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCreditCard } from "@fortawesome/free-regular-svg-icons";
 
 
+
 function Navbar() {
   const [isMobile, setIsMobile] = useState(false);
   const [cartTotal, setCartTotal] = useState(0);
