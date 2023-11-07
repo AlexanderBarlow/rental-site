@@ -236,13 +236,9 @@ const resolvers = {
       }
     },
 
-    editProfile: async (_, { profileId, username, email, city, profileImage, backgroundImage }) => {
-      // Process and save profileImage and backgroundImage using processUpload function
-      const uploadedProfileImage = await processUpload(profileImage);
-      const uploadedBackgroundImage = await processUpload(backgroundImage);
+    editProfile: async (_, { profileId, username, email, city }) => {
 
-      // Logic to update the profile with the file details
-      // Example: save file paths or references in the database
+
       try {
         const updatedProfile = await Profile.findByIdAndUpdate(
           profileId,
@@ -250,8 +246,6 @@ const resolvers = {
             username,
             email,
             city,
-            profileImage: uploadedProfileImage.path, // Save the file path to the profileImage field
-            backgroundImage: uploadedBackgroundImage.path, // Save the file path to the backgroundImage field
           },
           { new: true }
         );
@@ -263,18 +257,5 @@ const resolvers = {
     },
   },
 };
-
-// Function to handle file uploads
-// const processUpload = async (upload) => {
-//   const { createReadStream, filename } = await upload;
-//   const path = `./uploads/${filename}`; // Define the storage path
-
-//   return new Promise((resolve, reject) =>
-//     createReadStream()
-//       .pipe(createWriteStream(path)) // Save the file to the defined path
-//       .on('finish', () => resolve({ path })) // Return the file path
-//       .on('error', reject)
-//   );
-// };
 
 module.exports = resolvers;

@@ -6,6 +6,7 @@ import Auth from "../utils/auth";
 import { QUERY_SESSION_USER } from "../utils/queries";
 import { useQuery } from "@apollo/client";
 import { useEffect } from "react";
+import axios from "axios";
 
 
 const EditProfile = () => {
@@ -15,6 +16,7 @@ const EditProfile = () => {
   const [city, setCity] = useState("");
   const [profileImageError, setProfileImageError] = useState("");
   const [backgroundImageError, setBackgroundImageError] = useState("");
+  const [ file, setFile ] = useState(null);
 
   const [editProfile] = useMutation(EDIT_PROFILE);
 
@@ -41,73 +43,58 @@ const EditProfile = () => {
     return <p>Error: {error.message}</p>;
   }
 
+  const fileSelectedHandler = (event) => {
+    setFile({
+      selectedFile: event.target.files[0],
+    })
+    console.log(event.target.files[0])
+  }
+
+  const fileUploadHandler = () => {
+  const fd = new FormData();
+  fd.append('image', file, file.selectedFile.name);
+  axios.post('/subscriptions/8afadd42-dc7d-4997-a957-e837e54d44ba/resourceGroups/images/providers/Microsoft.Storage/storageAccounts/nesteaseimages/fileServices/default', fd)
+  .then(res => {
+    console.log(res);
+  })
+}
+
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
-  };
-
-  const handleProfileImageChange = (e) => {
-    const file = e.target.files[0];
-
-    if (file.type.split("/")[0] !== "image") {
-      setProfileImageError("Please select an image file.");
-    } else {
-      setProfileImageError("");
-      setProfileImage(file);
-    }
-  };
-
-  const handleBackgroundImageChange = (e) => {
-    const file = e.target.files[0];
-
-    if (file.type.split("/")[0] !== "image") {
-      setBackgroundImageError("Please select an image file.");
-    } else {
-      setBackgroundImageError("");
-      setBackgroundImage(file);
-    }
   };
 
   const handleCityChange = (e) => {
     setCity(e.target.value);
   };
 
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    setProfileImage(file);
+  };
+  
+  const handleBackgroundImageChange = (e) => {
+    const file = e.target.files[0];
+    setBackgroundImage(file);
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (profileImageError || backgroundImageError) {
-      console.error("Error: Image files are not valid.");
-      return;
-    }
-
+  
+    const formData = new FormData();
+    formData.append('profileId', ID);
+    formData.append('username', username || userData.username);
+    formData.append('email', userData.email);
+    formData.append('city', city || userData.city);
+  
     try {
-      const formData = new FormData();
-      formData.append("profileId", ID);
-      formData.append("username", username || userData.username);
-      formData.append("email", userData.email);
-      formData.append("city", city || userData.city);
-      formData.append("profileImage", profileImage);
-      formData.append("backgroundImage", backgroundImage);
-
-      await editProfile({
-        variables: {
-          profileId: ID,
-          username: username || userData.username,
-          email: userData.email,
-          city: city || userData.city,
-          profileImage: profileImage,
-          backgroundImage: backgroundImage,
-        },
-        context: {
-          fetchOptions: {
-            body: formData,
-            method: 'POST',
-          },
-        },
+      const { data } = await editProfile({
+        variables: formData,
       });
-
+  
+      console.log('Updated Profile Data:', data.editProfile);
       window.location.replace(`/profile/${ID}`);
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error('Error updating profile:', error);
     }
   };
 
@@ -140,7 +127,7 @@ const EditProfile = () => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleProfileImageChange}
+                onChange={fileSelectedHandler}
               />
               {profileImageError && <span>{profileImageError}</span>}
             </Typography>
@@ -151,7 +138,7 @@ const EditProfile = () => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleBackgroundImageChange}
+                onChange={fileSelectedHandler}
               />
               {backgroundImageError && <span>{backgroundImageError}</span>}
             </Typography>
@@ -165,7 +152,7 @@ const EditProfile = () => {
               fullWidth
             />
           </Box>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="primary" onSubmit={fileUploadHandler}>
             Save
           </Button>
         </form>
@@ -174,5 +161,6 @@ const EditProfile = () => {
   </div>
   );
 };
+
 
 export default EditProfile;
