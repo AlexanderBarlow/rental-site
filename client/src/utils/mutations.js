@@ -3,12 +3,14 @@ import { gql } from '@apollo/client';
 export const ADD_PROFILE = gql`
     mutation addProfile(
         $email: String!
+        $username: String!
         $password: String!
         $city: String!
         ) {
         addProfile
         (
             email: $email
+            username: $username
             password: $password
             city: $city
         )   
@@ -20,6 +22,27 @@ export const ADD_PROFILE = gql`
             }
         }
     }
+`;
+
+export const EDIT_PROFILE = gql`
+  mutation editProfile(
+    $profileId: ID!
+    $username: String
+    $email: String
+    $city: String
+  ) {
+    editProfile(
+      profileId: $profileId
+      username: $username
+      email: $email
+      city: $city
+    ) {
+      _id
+      username
+      email
+      city
+    }
+  }
 `;
 
 export const LOGIN_USER = gql`

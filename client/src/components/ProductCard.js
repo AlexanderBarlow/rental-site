@@ -58,6 +58,7 @@ function Product({ item }) {
             skip: !user,
           },
         });
+
       } catch (error) {
         console.error("An error occurred while processing the request:", error);
         // Handle error, show a message, etc.
@@ -110,9 +111,15 @@ function Product({ item }) {
       alt="Paella dish"
     />
     <CardContent>
-      <Button variant="outlined" sx={{background: "#051923"}} onClick={rented}>
-        Add to Cart
-      </Button>
+    {item.availability ? (
+          <Button variant="outlined" sx={{ background: "#051923" }} onClick={rented} id='addtocart'>
+            Add to Cart
+          </Button>
+        ) : (
+          <Button variant="outlined" sx={{ background: "#051923" }} >
+            Unavailable
+          </Button>
+        )}
     </CardContent>
     <CardActions disableSpacing>
       <ExpandMore

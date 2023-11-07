@@ -58,8 +58,8 @@ const resolvers = {
   },
 
   Mutation: {
-    addProfile: async (parent, { email, password, city }) => {
-      const profile = await Profile.create({ email, password, city });
+    addProfile: async (parent, { email, password, city, username }) => {
+      const profile = await Profile.create({ email, password, city, username });
       const token = signToken(profile);
       return { token, profile };
     },
@@ -90,7 +90,7 @@ const resolvers = {
 
     addItem: async (
       parent,
-      { itemName, description, itemPrice, city },
+      { itemName, description, itemPrice, city, itemImage },
       context
     ) => {
       if (!context.user) {
@@ -103,6 +103,7 @@ const resolvers = {
         itemPrice,
         city,
         itemOwner: context.user._id,
+        itemImage,
         availability: true,
       });
 
@@ -232,6 +233,28 @@ const resolvers = {
         return { sessionUrl: session.url };
       } catch (error) {
         throw new Error(error.message);
+      }
+    },
+
+    editProfile: async (parent, { profileId, username, email, city }) => {
+      const user = await Profile.findById(profileId);
+    
+      if (!user) {
+        throw new Error("User not found");
+      }
+    
+      try {
+        // Update user profile with image references or paths
+        user.username = username;
+        user.email = email;
+        user.city = city;
+    
+        // Save the updated user profile
+        const updatedProfile = await user.save();
+
+        return updatedProfile;
+      } catch (error) {
+        throw new Error(`Error editing profile: ${error.message}`);
       }
     },
   },

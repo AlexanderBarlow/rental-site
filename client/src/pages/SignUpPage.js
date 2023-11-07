@@ -20,6 +20,7 @@ import Auth from '../utils/auth';
 function SignUp(props) {
   const [formState, setFormState] = useState({
     email: '',
+    username:'',
     password: '',
     city: '',
   });
@@ -41,6 +42,7 @@ const handleFormSubmit = async (event) => {
  const mutationResponse = await addProfile({
   variables: {
     email: formState.email,
+    username: formState.username,
     password: formState.password,
     city: formState.city,
   },
@@ -121,6 +123,18 @@ const theme = createTheme();
                 name="email"
                 autoComplete="email"
                 value={formState.email}
+                onChange={handleChange}
+                autoFocus
+              />
+                <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="username"
+                name="username"
+                autoComplete="username"
+                value={formState.username}
                 onChange={handleChange}
                 autoFocus
               />
