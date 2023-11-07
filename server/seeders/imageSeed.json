@@ -1,0 +1,10 @@
+[
+  {
+    "data": "Base64EncodedImageDataString1",
+    "contentType": "image/png"
+  },
+  {
+    "data": "Base64EncodedImageDataString2",
+    "contentType": "image/jpeg"
+  }
+]

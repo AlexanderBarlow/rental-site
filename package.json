@@ -29,6 +29,8 @@
         "@mui/icons-material": "^5.14.15",
         "@splinetool/loader": "^0.9.492",
         "@splinetool/react-spline": "^2.2.6",
+        "apollo-upload-client": "^18.0.1",
+        "apollo-upload-server": "^7.1.0",
         "axios": "^1.6.0",
         "font-awesome": "^4.7.0",
         "react-scroll": "^1.9.0",

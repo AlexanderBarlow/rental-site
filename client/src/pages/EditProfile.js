@@ -10,18 +10,18 @@ import { useEffect } from "react";
 
 const EditProfile = () => {
   const [username, setUsername] = useState("");
-  const [profileImage, setProfileImage] = useState("");
-  const [backgroundImage, setBackgroundImage] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState(null);
   const [city, setCity] = useState("");
   const [profileImageError, setProfileImageError] = useState("");
   const [backgroundImageError, setBackgroundImageError] = useState("");
 
-  const [editProfile, { data }] = useMutation(EDIT_PROFILE);
+  const [editProfile] = useMutation(EDIT_PROFILE);
 
   const user = Auth.getProfile();
   const ID = user.data._id;
 
-  const { data:userdata, loading, error } = useQuery(QUERY_SESSION_USER, {
+  const { data: userdata, loading, error } = useQuery(QUERY_SESSION_USER, {
     variables: { profileId: ID },
   });
   const [userData, setUserData] = useState(null);
@@ -40,7 +40,6 @@ const EditProfile = () => {
   if (error) {
     return <p>Error: {error.message}</p>;
   }
-  
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -48,9 +47,8 @@ const EditProfile = () => {
 
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
-    const fileType = file.type.split("/")[0];
 
-    if (fileType !== "image") {
+    if (file.type.split("/")[0] !== "image") {
       setProfileImageError("Please select an image file.");
     } else {
       setProfileImageError("");
@@ -60,9 +58,8 @@ const EditProfile = () => {
 
   const handleBackgroundImageChange = (e) => {
     const file = e.target.files[0];
-    const fileType = file.type.split("/")[0];
 
-    if (fileType !== "image") {
+    if (file.type.split("/")[0] !== "image") {
       setBackgroundImageError("Please select an image file.");
     } else {
       setBackgroundImageError("");
@@ -78,27 +75,39 @@ const EditProfile = () => {
     e.preventDefault();
 
     if (profileImageError || backgroundImageError) {
-        console.error("Error: Image files are not valid.");
-        return;
-      }
+      console.error("Error: Image files are not valid.");
+      return;
+    }
 
     try {
-      const { data } = await editProfile({
+      const formData = new FormData();
+      formData.append("profileId", ID);
+      formData.append("username", username || userData.username);
+      formData.append("email", userData.email);
+      formData.append("city", city || userData.city);
+      formData.append("profileImage", profileImage);
+      formData.append("backgroundImage", backgroundImage);
+
+      await editProfile({
         variables: {
-            profileId: ID,
-            username: username || userData.username, // If fields are empty, use existing data
-            email: userData.email,
-            city: city || userData.city,
-            profileImage: profileImage.toString || userData.profileImage,
-            backgroundImage: backgroundImage.toString || userData.backgroundImage,
+          profileId: ID,
+          username: username || userData.username,
+          email: userData.email,
+          city: city || userData.city,
+          profileImage: profileImage,
+          backgroundImage: backgroundImage,
+        },
+        context: {
+          fetchOptions: {
+            body: formData,
+            method: 'POST',
+          },
         },
       });
 
-      console.log("Updated Profile Data:", data.editProfile);
       window.location.replace(`/profile/${ID}`);
     } catch (error) {
       console.error("Error updating profile:", error);
-      console.log(profileImage);
     }
   };
 

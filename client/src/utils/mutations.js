@@ -30,8 +30,8 @@ export const EDIT_PROFILE = gql`
     $username: String
     $email: String
     $city: String
-    $profileImage: String
-    $backgroundImage: String
+    $profileImage: Upload
+    $backgroundImage: Upload
   ) {
     editProfile(
       profileId: $profileId
