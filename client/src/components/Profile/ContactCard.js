@@ -20,6 +20,11 @@ function MainFeaturedPost(props) {
 
   const [userData, setUserData] = useState(null);
 
+  const img = {
+    image: "https://source.unsplash.com/random",
+  };
+  
+
   useEffect(() => {
     if (data && data.profile) {
       setUserData(data.profile);
@@ -49,7 +54,7 @@ function MainFeaturedPost(props) {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          backgroundImage: `${userData.backgroundImage}`,
+          backgroundImage: `url(${img.image})`,
           justifySelf: "center",
           width: '100%',
           padding: '0 2%',

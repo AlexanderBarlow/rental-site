@@ -236,19 +236,21 @@ const resolvers = {
       }
     },
 
-    editProfile: async (_, { profileId, username, email, city }) => {
-
-
+    editProfile: async (parent, { profileId, username, email, city }) => {
+      const user = await Profile.findById(profileId);
+    
+      if (!user) {
+        throw new Error("User not found");
+      }
+    
       try {
-        const updatedProfile = await Profile.findByIdAndUpdate(
-          profileId,
-          {
-            username,
-            email,
-            city,
-          },
-          { new: true }
-        );
+        // Update user profile with image references or paths
+        user.username = username;
+        user.email = email;
+        user.city = city;
+    
+        // Save the updated user profile
+        const updatedProfile = await user.save();
 
         return updatedProfile;
       } catch (error) {
