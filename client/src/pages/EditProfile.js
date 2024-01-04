@@ -6,12 +6,12 @@ import Auth from "../utils/auth";
 import { QUERY_SESSION_USER } from "../utils/queries";
 import { useQuery } from "@apollo/client";
 import { useEffect } from "react";
-import axios from "axios";
-
+import { storage } from "../utils/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const EditProfile = () => {
   const [username, setUsername] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImage, setProfileImage] = useState();
   const [backgroundImage, setBackgroundImage] = useState("");
   const [city, setCity] = useState("");
 
@@ -20,7 +20,11 @@ const EditProfile = () => {
   const user = Auth.getProfile();
   const ID = user.data._id;
 
-  const { data:userdata, loading, error } = useQuery(QUERY_SESSION_USER, {
+  const {
+    data: userdata,
+    loading,
+    error,
+  } = useQuery(QUERY_SESSION_USER, {
     variables: { profileId: ID },
   });
   const [userData, setUserData] = useState(null);
@@ -39,18 +43,26 @@ const EditProfile = () => {
   if (error) {
     return <p>Error: {error.message}</p>;
   }
-  
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
 
-  const handleProfileImageChange = (e) => {
-    setProfileImage(e.target.value);
-  };
+  const uploadImage = async (image, imageType, ID) => {
+    if (image == null) {
+      return null;
+    }
 
-  const handleBackgroundImageChange = (e) => {
-    setBackgroundImage(e.target.value);
+    const imageRef = ref(storage, `images/${image.name + ID}`);
+    await uploadBytes(imageRef, image);
+
+    // Get the download URL for the uploaded file
+    const imageUrl = await getDownloadURL(imageRef);
+
+    console.log(`Uploaded ${imageType} image!`);
+    alert(`Uploaded ${imageType} image!`);
+
+    return imageUrl;
   };
 
   const handleCityChange = (e) => {
@@ -61,14 +73,21 @@ const EditProfile = () => {
     e.preventDefault();
 
     try {
+      const profileImageUrl = await uploadImage(profileImage, "profile", ID);
+      const backgroundImageUrl = await uploadImage(
+        backgroundImage,
+        "background",
+        ID
+      );
+
       const { data } = await editProfile({
         variables: {
-            profileId: ID,
-            username: username || userData.username, // If fields are empty, use existing data
-            email: userData.email,
-            city: city || userData.city,
-            profileImage: profileImage || userData.profileImage,
-            backgroundImage: backgroundImage || userData.backgroundImage,
+          profileId: ID,
+          username: username || userData.username,
+          email: userData.email,
+          city: city || userData.city,
+          profileImage: profileImageUrl || userData.profileImage || "",
+          backgroundImage: backgroundImageUrl || userData.backgroundImage || "",
         },
       });
 
@@ -91,38 +110,44 @@ const EditProfile = () => {
     >
       <Container maxWidth="lg">
         <Box sx={{ mt: 4 }}>
-          <Typography variant="h4" align="center" gutterBottom sx={{color: "#FFF"}}>
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{ color: "#FFF" }}
+          >
             Edit Profile
           </Typography>
           <form onSubmit={handleSubmit}>
-            <Box sx={{ mb: 2, background: '#FFF' }}>
+            <Box sx={{ mb: 2, background: "#FFF" }}>
               <TextField
                 label="Username"
                 variant="outlined"
                 value={username}
                 onChange={handleUsernameChange}
-                fullWidth
               />
             </Box>
-            <Box sx={{ mb: 2, background: '#FFF' }}>
-              <TextField
+            <Box sx={{ mb: 2, background: "#FFF" }}>
+              <input
                 label="Profile Image URL"
                 variant="outlined"
-                value={profileImage}
-                onChange={handleProfileImageChange}
-                fullWidth
+                type="file"
+                onChange={(e) => {
+                  setProfileImage(e.target.files[0]);
+                }}
               />
             </Box>
-            <Box sx={{ mb: 2, background: '#FFF' }}>
-              <TextField
-                label="Background Image URL"
+            <Box sx={{ mb: 2, background: "#FFF" }}>
+              <input
+                label="Profile Image URL"
                 variant="outlined"
-                value={backgroundImage}
-                onChange={handleBackgroundImageChange}
-                fullWidth
+                type="file"
+                onChange={(e) => {
+                  setBackgroundImage(e.target.files[0]);
+                }}
               />
             </Box>
-            <Box sx={{ mb: 2, background: '#FFF' }}>
+            <Box sx={{ mb: 2, background: "#FFF" }}>
               <TextField
                 label="City"
                 variant="outlined"

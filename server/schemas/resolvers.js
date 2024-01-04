@@ -236,19 +236,31 @@ const resolvers = {
       }
     },
 
-    editProfile: async (parent, { profileId, username, email, city }) => {
+    editProfile: async (
+      parent,
+      { profileId, username, email, city, profileImage, backgroundImage }
+    ) => {
       const user = await Profile.findById(profileId);
-    
+
       if (!user) {
         throw new Error("User not found");
       }
-    
+
       try {
-        // Update user profile with image references or paths
+        // Update user profile with provided fields
         user.username = username;
         user.email = email;
         user.city = city;
-    
+
+        // If profileImage and backgroundImage are provided, update them as well
+        if (profileImage) {
+          user.profileImage = profileImage;
+        }
+
+        if (backgroundImage) {
+          user.backgroundImage = backgroundImage;
+        }
+
         // Save the updated user profile
         const updatedProfile = await user.save();
 

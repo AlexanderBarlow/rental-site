@@ -24,11 +24,9 @@ const profileSchema = new Schema({
     required: true,
   },
   profileImage: {
-    data: Buffer,
     type: String, 
   },
   backgroundImage: {
-    data: Buffer,
     type: String, 
   },
   rentable_items: [{

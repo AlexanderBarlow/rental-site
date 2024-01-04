@@ -100,6 +100,8 @@ type Mutation {
     username: String
     email: String
     city: String
+    profileImage: String
+    backgroundImage: String
   ): Profile
 }
 
