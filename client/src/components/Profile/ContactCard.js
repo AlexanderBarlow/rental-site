@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -8,7 +7,7 @@ import { useQuery } from "@apollo/client";
 import { QUERY_SESSION_USER } from "../../utils/queries";
 import Box from "@mui/material/Box";
 import { Container } from "@mui/material";
-// import { Avatar, AvatarGroup, AvatarIcon } from "@nextui-org/react";
+import Avatar from "@mui/material/Avatar";
 
 function MainFeaturedPost(props) {
   const { post } = props;
@@ -46,8 +45,6 @@ function MainFeaturedPost(props) {
   if (userData && profileImageUrl) {
     return (
       <Container sx={{ width: "100%" }}>
-        <img src={profileImageUrl || img.image} alt="Profile" />
-
         <Paper
           sx={{
             position: "relative",
@@ -57,10 +54,11 @@ function MainFeaturedPost(props) {
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
-            backgroundImage: `url(${profileImageUrl || img.image})`, // Use profileImageUrl if available, fallback to img.image
+            backgroundImage: `url(${profileImageUrl || img.image})`,
             justifySelf: "center",
             width: "100%",
             padding: "0 2%",
+            display: "flex", // Added display flex to enable alignment
           }}
         >
           <Grid container>
@@ -68,7 +66,7 @@ function MainFeaturedPost(props) {
               <Box
                 sx={{
                   position: "relative",
-                  p: { xs: 2, md: 6 }, // Adjust padding for smaller screens
+                  p: { xs: 2, md: 6 },
                   pr: { md: 0 },
                 }}
               >
@@ -90,6 +88,21 @@ function MainFeaturedPost(props) {
                   {userData.city}
                 </Typography>
               </Box>
+            </Grid>
+            <Grid
+              item
+              md={6}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
+            >
+              <Avatar
+                alt="Profile Avatar"
+                src={profileImageUrl || img.image}
+                sx={{ width: 100, height: 100, marginRight: 2 }}
+              />
             </Grid>
           </Grid>
         </Paper>
