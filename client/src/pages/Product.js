@@ -79,7 +79,7 @@ const Product = () => {
 
         <div style={styles.grid}>
             {items.map((item) => (
-                <ProductCard item={item} />
+                <ProductCard item={item} key={item.item_id}/>
             ))}
         </div>
       </div>

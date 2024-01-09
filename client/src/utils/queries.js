@@ -15,6 +15,7 @@ export const QUERY_SINGLE_PROFILE = gql`
         profile(profileId: $profileId) {
             email
             city
+            profileImage
         }
     }
 `;
@@ -68,6 +69,11 @@ export const QUERY_ALL_ITEM = gql`
           description
           itemName
           itemPrice
+          itemImage
+          itemOwner {
+            _id
+            profileImage
+          }
     }
     }
 `;

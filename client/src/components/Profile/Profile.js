@@ -101,7 +101,7 @@ const Blog = () => {
   const auth = Auth.getProfile();
   const ID = auth.data._id;
   const [expanded, setExpanded] = useState(false);
-   const [showDetails, setShowDetails] = useState([]);
+  const [showDetails, setShowDetails] = useState([]);
 
   const { data: userData } = useQuery(QUERY_SESSION_USER, {
     variables: { profileId: ID },
@@ -113,19 +113,16 @@ const Blog = () => {
     variables: { profileId: ID },
   });
 
-
-
- useEffect(() => {
-   if (data) {
-     const rentData = data.rentable_items;
-     setShowDetails(rentData);
-   }
- }, [data]);
+  useEffect(() => {
+    if (data) {
+      const rentData = data.rentable_items;
+      setShowDetails(rentData);
+    }
+  }, [data]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
 
   return (
     <div style={styles.background}>
