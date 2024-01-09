@@ -8,6 +8,13 @@ import { useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { storage } from "../utils/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+
+const styles = {
+  hidden : {
+    display: "none"
+  }
+}
 
 const EditProfile = () => {
   const [username, setUsername] = useState("");
@@ -125,26 +132,7 @@ const EditProfile = () => {
                 variant="outlined"
                 value={username}
                 onChange={handleUsernameChange}
-              />
-            </Box>
-            <Box sx={{ mb: 2, background: "#FFF" }}>
-              <input
-                label="Profile Image URL"
-                variant="outlined"
-                type="file"
-                onChange={(e) => {
-                  setProfileImage(e.target.files[0]);
-                }}
-              />
-            </Box>
-            <Box sx={{ mb: 2, background: "#FFF" }}>
-              <input
-                label="Profile Image URL"
-                variant="outlined"
-                type="file"
-                onChange={(e) => {
-                  setBackgroundImage(e.target.files[0]);
-                }}
+                fullWidth
               />
             </Box>
             <Box sx={{ mb: 2, background: "#FFF" }}>
@@ -156,9 +144,61 @@ const EditProfile = () => {
                 fullWidth
               />
             </Box>
-            <Button type="submit" variant="contained" color="primary">
-              Save
-            </Button>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Box sx={{ mb: 2, ...styles.centered, marginRight: "2%" }}>
+                <label htmlFor="profileImageInput">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component="span"
+                    sx={{ mt: 2 }}
+                  >
+                    Upload Profile Image
+                    <UploadFileIcon />
+                  </Button>
+                </label>
+                <input
+                  id="profileImageInput"
+                  style={styles.hidden}
+                  type="file"
+                  onChange={(e) => {
+                    setProfileImage(e.target.files[0]);
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ mb: 2, ...styles.centered }}>
+                <label htmlFor="backgroundImageInput">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component="span"
+                    sx={{ mt: 2 }}
+                  >
+                    Upload Background Image <UploadFileIcon />
+                  </Button>
+                </label>
+                <input
+                  id="backgroundImageInput"
+                  style={styles.hidden}
+                  type="file"
+                  onChange={(e) => {
+                    setBackgroundImage(e.target.files[0]);
+                  }}
+                />
+              </Box>
+            </div>
+            <Box
+              sx={{
+                ...styles.centered,
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Button type="submit" variant="contained" color="primary">
+                Save
+              </Button>
+            </Box>
           </form>
         </Box>
       </Container>
