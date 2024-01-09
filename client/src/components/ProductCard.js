@@ -107,7 +107,7 @@ function Product({ item }) {
     <CardMedia
       component="img"
       height="194"
-      image={img.image}
+      image={item.itemImage || img.image}
       alt="Paella dish"
     />
     <CardContent>

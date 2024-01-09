@@ -86,7 +86,7 @@ type Mutation {
     description: String
     itemPrice: String!
     city: String!
-    itemImage: String
+    itemImage: String!
   ): Item
   rentItem(_id: ID!): Profile
   removeItem(_id: ID!): Item

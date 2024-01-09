@@ -126,6 +126,7 @@ const Blog = () => {
     setExpanded(!expanded);
   };
 
+
   return (
     <div style={styles.background}>
       <ThemeProvider theme={theme}>
@@ -166,7 +167,7 @@ const Blog = () => {
                     <CardMedia
                       component="img"
                       height="250"
-                      image={img.image}
+                      image={item.itemImage}
                       alt="Product Image"
                     />
                     <CardContent>
