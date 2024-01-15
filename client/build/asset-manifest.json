@@ -1,5 +1,6 @@
 {
   "files": {
+<<<<<<< HEAD
     "main.css": "/static/css/main.2a8f5667.css",
     "main.js": "/static/js/main.c8bbb485.js",
     "static/js/735.61666eeb.chunk.js": "/static/js/735.61666eeb.chunk.js",
@@ -17,5 +18,35 @@
   "entrypoints": [
     "static/css/main.2a8f5667.css",
     "static/js/main.c8bbb485.js"
+=======
+    "main.css": "/static/css/main.456bbc1a.chunk.css",
+    "main.js": "/static/js/main.8d1c9a9a.chunk.js",
+    "main.js.map": "/static/js/main.8d1c9a9a.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.7a234afe.js",
+    "runtime-main.js.map": "/static/js/runtime-main.7a234afe.js.map",
+    "static/css/2.b7a07b9d.chunk.css": "/static/css/2.b7a07b9d.chunk.css",
+    "static/js/2.f3ce67e4.chunk.js": "/static/js/2.f3ce67e4.chunk.js",
+    "static/js/2.f3ce67e4.chunk.js.map": "/static/js/2.f3ce67e4.chunk.js.map",
+    "static/js/3.e93354ed.chunk.js": "/static/js/3.e93354ed.chunk.js",
+    "static/js/3.e93354ed.chunk.js.map": "/static/js/3.e93354ed.chunk.js.map",
+    "index.html": "/index.html",
+    "service-worker.js": "/service-worker.js",
+    "service-worker.js.map": "/service-worker.js.map",
+    "static/css/2.b7a07b9d.chunk.css.map": "/static/css/2.b7a07b9d.chunk.css.map",
+    "static/css/main.456bbc1a.chunk.css.map": "/static/css/main.456bbc1a.chunk.css.map",
+    "static/js/2.f3ce67e4.chunk.js.LICENSE.txt": "/static/js/2.f3ce67e4.chunk.js.LICENSE.txt",
+    "static/media/3D Paths - Lines 1 - Copy@1-2560x1363.6044bfbe.jpg": "/static/media/3D Paths - Lines 1 - Copy@1-2560x1363.6044bfbe.jpg",
+    "static/media/Checkout-social-card.d742f8e8.png": "/static/media/Checkout-social-card.d742f8e8.png",
+    "static/media/express_checkout_ce31841eb7.6d0d3b90.png": "/static/media/express_checkout_ce31841eb7.6d0d3b90.png",
+    "static/media/how-to-make-money-online.26fd5171.jpg": "/static/media/how-to-make-money-online.26fd5171.jpg",
+    "static/media/logo1.e151f6c9.png": "/static/media/logo1.e151f6c9.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7a234afe.js",
+    "static/css/2.b7a07b9d.chunk.css",
+    "static/js/2.f3ce67e4.chunk.js",
+    "static/css/main.456bbc1a.chunk.css",
+    "static/js/main.8d1c9a9a.chunk.js"
+>>>>>>> 836d4330746eab7ae20d711dedcfb2a98c86b4ed
   ]
 }
