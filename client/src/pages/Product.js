@@ -7,7 +7,6 @@ import { QUERY_ALL_ITEM } from "../utils/queries";
 import ProductCard from "../components/ProductCard";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 
 const theme = createTheme();
 

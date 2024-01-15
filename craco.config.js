@@ -1,4 +1,5 @@
-// craco.config.js
+
+
 module.exports = {
   webpack: {
     configure: (webpackConfig, { env, paths }) => {
@@ -17,6 +18,7 @@ module.exports = {
         include: /node_modules/,
         type: "javascript/auto",
       });
+      // Use dotenv-webpack to load environment variables from .env.client
 
       return webpackConfig;
     },

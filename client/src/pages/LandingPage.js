@@ -47,7 +47,6 @@ const styles = {
     alignItems: "center",
     height: "fit-content",
     listStyle: "none",
-    padding: "0",
     textAlign: "center",
   },
   navItem: {

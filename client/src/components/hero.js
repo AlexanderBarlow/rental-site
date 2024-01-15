@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import backdropPic from '../images/3D Paths - Lines 1 - Copy@1-2560x1363.jpg';
-import Background from '../background';
 
 export default function Hero() {
     const backgroundStyle = {

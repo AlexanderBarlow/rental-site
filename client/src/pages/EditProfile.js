@@ -22,7 +22,7 @@ const EditProfile = () => {
   const [backgroundImage, setBackgroundImage] = useState("");
   const [city, setCity] = useState("");
 
-  const [editProfile, { data }] = useMutation(EDIT_PROFILE);
+  const [editProfile] = useMutation(EDIT_PROFILE);
 
   const user = Auth.getProfile();
   const ID = user.data._id;

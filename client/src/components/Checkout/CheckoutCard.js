@@ -10,7 +10,6 @@ import { GET_CART } from "../../utils/queries";
 import Auth from "../../utils/auth";
 import { useState, useEffect } from "react";
 import { Button } from '@mui/material';
-import { Form, Link } from 'react-router-dom';
 
 const styles = {
   bgcolor: {

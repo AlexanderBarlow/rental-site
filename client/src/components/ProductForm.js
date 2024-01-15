@@ -42,7 +42,7 @@ const ProductForm = () => {
     itemPrice: "",
     city: "",
   });
-  const [addProduct, { error }] = useMutation(ADD_ITEM);
+  const [addProduct,] = useMutation(ADD_ITEM);
   const [productImage, setProductImage] = useState(null);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
 
@@ -65,6 +65,7 @@ const ProductForm = () => {
 
       const profileUrl = `/profile/${userId}`;
       window.location.replace(profileUrl);
+      console.log(data)
     } catch (err) {
       console.error(err);
     }

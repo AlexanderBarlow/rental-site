@@ -49,7 +49,6 @@ const AddCredit = () => {
       flexDirection: 'column',
       justifyContent: 'center',
       backgroundColor: "#006494",
-      width: "100%",
     }}
   >
     <Typography variant="h4" gutterBottom>Select Quantity of Credits</Typography>

@@ -6,7 +6,6 @@ import Icon from "@mui/icons-material/ShoppingCart";
 import { GET_CART } from "../utils/queries";
 import { GET_CREDITS } from "../utils/queries";
 import {
-  useMediaQuery,
   AppBar,
   Toolbar,
   IconButton,
@@ -18,11 +17,7 @@ import {
 } from "@mui/material";
 import Icon2 from "@mui/icons-material/Menu";
 import Auth from "../utils/auth";
-import { makeStyles } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
-import anchorEl from "@mui/material/Menu";
-import handleMobileMenuClose from "@mui/material/Menu";
-import handleMobileMenuOpen from "@mui/material/Menu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCreditCard } from "@fortawesome/free-regular-svg-icons";
 
@@ -33,6 +28,8 @@ function Navbar() {
   const [cartTotal, setCartTotal] = useState(0);
   const [cartData, setCartData] = useState(null);
   const [credits, setCredits] = useState(0);
+  console.log(cartData)
+  console.log(credits);
 
   const theme = useTheme();
 
@@ -51,12 +48,12 @@ function Navbar() {
 
   const userId = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
-  const { loading, data } = useQuery(GET_CART, {
+  const { data } = useQuery(GET_CART, {
     variables: { userId },
     skip: !userId,
   });
 
-  const { loading: creditLoading, data: creditData } = useQuery(GET_CREDITS, {
+  const { data: creditData } = useQuery(GET_CREDITS, {
     variables: { userId },
     skip: !userId,
   });

@@ -9,11 +9,7 @@ import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Button from "@mui/material/Button";
 import { useMutation } from "@apollo/client";
 import { UPDATE_ITEM_AVAILABILITY, ADD_ITEM_TO_CART } from "../utils/mutations";
@@ -35,7 +31,7 @@ const ExpandMore = styled((props) => {
 function Product({ item }) {
   const [updateItemAvailability] = useMutation(UPDATE_ITEM_AVAILABILITY);
   const [addItemToCart] = useMutation(ADD_ITEM_TO_CART);
-  const { loading: userLoading, data: userData } = useQuery(
+  const { data: userData } = useQuery(
     QUERY_SINGLE_PROFILE,
     {
       variables: { profileId: item.itemOwner._id },
@@ -76,22 +72,6 @@ function Product({ item }) {
     }
   };
 
-  const styles = {
-    bgcolor: {
-      background: "#006494",
-    },
-    font: {
-      fontFamily: "Times New Roman",
-    },
-    border: "5px solid black",
-    marginBottom: "30px",
-    borderRadius: "10px",
-    btn: {
-      display: "flex",
-      justifyContent: "start",
-      alignItems: "center",
-    },
-  };
 
   const img = {
     image: "https://source.unsplash.com/random",

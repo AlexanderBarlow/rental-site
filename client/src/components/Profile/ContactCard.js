@@ -10,7 +10,6 @@ import { Container } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 
 function MainFeaturedPost(props) {
-  const { post } = props;
   const auth = Auth.getProfile();
   const ID = auth.data._id;
 

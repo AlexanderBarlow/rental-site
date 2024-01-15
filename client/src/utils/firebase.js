@@ -1,9 +1,6 @@
+// src/utils/firebase.js
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
-import dotenv from "dotenv";
-
-dotenv.config(); // Load environment variables
 
 const {
   REACT_APP_FIREBASE_API_KEY,
@@ -13,10 +10,7 @@ const {
   REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   REACT_APP_FIREBASE_APP_ID,
   REACT_APP_FIREBASE_MEASUREMENT_ID,
-  NEXT_PUBLIC_KEY,
-  REACT_APP_MY_VARIABLE,
 } = process.env;
-
 
 const firebaseConfig = {
   apiKey: REACT_APP_FIREBASE_API_KEY,
@@ -30,6 +24,5 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 export const storage = getStorage(app);

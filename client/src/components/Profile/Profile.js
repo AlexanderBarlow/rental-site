@@ -4,7 +4,6 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ContactCard from "./ContactCard";
-import ProductCard from "./UserProducts";
 import Card from "@mui/material/Card";
 import { useQuery } from "@apollo/client";
 import CardContent from "@mui/material/CardContent";
@@ -13,38 +12,19 @@ import { QUERY_ITEMS, QUERY_SESSION_USER } from "../../utils/queries";
 import Auth from "../../utils/auth";
 import { useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
-import { useApolloClient } from "@apollo/client";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
 import { red } from "@mui/material/colors";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
 import { faUserPen } from "@fortawesome/free-solid-svg-icons";
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
-
-const img = {
-  image: "https://source.unsplash.com/random",
-};
-
 const styles = {
-  marginBottom: "50px",
   bgcolor: {
     background: "#003554",
   },
@@ -97,7 +77,6 @@ const styles = {
 const theme = createTheme();
 
 const Blog = () => {
-  const client = useApolloClient();
   const auth = Auth.getProfile();
   const ID = auth.data._id;
   const [expanded, setExpanded] = useState(false);

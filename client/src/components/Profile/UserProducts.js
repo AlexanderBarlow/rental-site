@@ -14,10 +14,7 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import { QUERY_ITEMS } from '../../utils/queries';
 import Auth from '../../utils/auth';
@@ -69,8 +66,6 @@ function FeaturedPost({ item }) {
   if(error) {
     return <p>Error</p>
   }
-
-  const itemData = data
 
   const styles = {
     bgcolor: {
