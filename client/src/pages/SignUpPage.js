@@ -47,7 +47,8 @@ const handleFormSubmit = async (event) => {
     city: formState.city,
   },
  });
- const token = mutationResponse.data.addProfile.token;
+ const token = mutationResponse?.data.addProfile.token;
+ console.log(token)
  Auth.login(token);
 };
 

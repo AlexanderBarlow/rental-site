@@ -7,7 +7,6 @@ const stripe = require("stripe")(
 );
 const env = require("dotenv").config();
 const cors = require("cors");
-app.use(cors());
 
 
 const Credit = require("./models/Credits");
@@ -15,7 +14,7 @@ const Credit = require("./models/Credits");
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
 
-const YOUR_DOMAIN = "http://localhost:3000";
+const YOUR_DOMAIN = "https://nestease.vercel.app/";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -25,6 +24,12 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
+app.use(
+  cors({
+    origin: "https://nestease.vercel.app",
+    credentials: true,
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
