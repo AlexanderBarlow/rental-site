@@ -25,7 +25,7 @@ import AddCreddit from "./pages/AddCredit"
 import EditProfile from "./pages/EditProfile"
 
 const httpLink = createHttpLink({
-  uri: "https://nestease-7s7sjy5q5-alexanderbarlow.vercel.app/",
+  uri: "https://nestease.vercel.app/",
 });
 
 const authLink = setContext((_, { headers }) => {
