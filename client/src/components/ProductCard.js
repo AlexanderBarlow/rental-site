@@ -39,7 +39,6 @@ function Product({ item }) {
   );
 
   const owner = userData?.profile || null;
-  console.log(owner);
 
   const user = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
