@@ -1,22 +1,26 @@
 [
-    {
-      "email": "akay@techfriends.dev",
-      "password": "password06",
-      "city": "123 fake"
-    },
-    {
-      "email": "choare@techfriends.dev",
-      "password": "password07",
-      "city": "123 fake"
-    },
-    {
-      "email": "dthomas@techfriends.dev",
-      "password": "password08",
-      "city": "123 fake"
-    },
-    {
-      "email": "dknuth@techfriends.dev",
-      "password": "password09",
-      "city": "123 fake"
-    }
-  ]
+  {
+    "email": "akay@techfriends.dev",
+    "username": "TheBestAkay",
+    "password": "password06",
+    "city": "123 fake"
+  },
+  {
+    "email": "choare@techfriends.dev",
+    "username": "BigChungus",
+    "password": "password07",
+    "city": "123 fake"
+  },
+  {
+    "email": "dthomas@techfriends.dev",
+    "username": "WhereTheyAtThough",
+    "password": "password08",
+    "city": "123 fake"
+  },
+  {
+    "email": "dknuth@techfriends.dev",
+    "username": "EverybodyNow",
+    "password": "password09",
+    "city": "123 fake"
+  }
+]

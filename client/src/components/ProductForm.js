@@ -1,20 +1,18 @@
 import React, { useState } from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Auth from "../utils/auth";
 import { useMutation } from "@apollo/client";
 import { ADD_ITEM } from "../utils/mutations";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { storage } from "../utils/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const styles = {
   container: {
@@ -26,32 +24,49 @@ const styles = {
     flex: "0 0 100%",
   },
   background: {
-    display: 'flex'
-  }
+    display: "flex",
+  },
+  hidden: {
+    display: "none",
+  },
+  centered: {
+    display: "flex",
+    justifyContent: "center",
+  },
 };
 
 const ProductForm = () => {
-  const [formState, setFormState] = useState({ 
-    itemName: "", 
+  const [formState, setFormState] = useState({
+    itemName: "",
     description: "",
     itemPrice: "",
     city: "",
- });
-  const [addProduct, { error, data }] = useMutation(ADD_ITEM);
+  });
+  const [addProduct, { error }] = useMutation(ADD_ITEM);
+  const [productImage, setProductImage] = useState(null);
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
+
+  const userId = Auth.getToken();
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     console.log(formState);
-   
-    try{
-    const { data }  = await addProduct({
-        variables: {...formState}
+
+    try {
+      const { data } = await addProduct({
+        variables: {
+          ...formState,
+          itemImage: isImageUploaded
+            ? null
+            : await uploadImage(productImage, "product", userId),
+        },
       });
-      
-    window.location.replace('/profile')
+
+      const profileUrl = `/profile/${userId}`;
+      window.location.replace(profileUrl);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -63,7 +78,23 @@ const ProductForm = () => {
       [name]: value,
     });
 
-    console.log(formState)
+    console.log(formState);
+  };
+
+  const uploadImage = async (image, imageType, userId) => {
+    if (image == null) {
+      return null;
+    }
+
+    const imageRef = ref(storage, `images/${image.name + userId}`);
+    await uploadBytes(imageRef, image);
+
+    // Get the download URL for the uploaded file
+    const imageUrl = await getDownloadURL(imageRef);
+
+    setIsImageUploaded(true);
+
+    return imageUrl;
   };
 
   const theme = createTheme();
@@ -78,7 +109,8 @@ const ProductForm = () => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://images.unsplash.com/photo-1622737133809-d95047b9e673?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80)",
+            backgroundImage:
+              "url(https://images.unsplash.com/photo-1622737133809-d95047b9e673?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80)",
             backgroundColor: (t) =>
               t.palette.mode === "light"
                 ? t.palette.grey[50]
@@ -125,7 +157,7 @@ const ProductForm = () => {
                 value={formState.description}
                 onChange={handleChange}
               />
-               <TextField
+              <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -144,6 +176,33 @@ const ProductForm = () => {
                 value={formState.city}
                 onChange={handleChange}
               />
+              <Box
+                sx={{
+                  mb: 2,
+                  ...styles.centered,
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <label htmlFor="backgroundImageInput">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component="span"
+                    sx={{ mt: 2 }}
+                  >
+                    Upload Background Image <UploadFileIcon />
+                  </Button>
+                </label>
+                <input
+                  id="backgroundImageInput"
+                  style={styles.hidden}
+                  type="file"
+                  onChange={(e) => {
+                    setProductImage(e.target.files[0]);
+                  }}
+                />
+              </Box>
               <Button
                 type="submit"
                 fullWidth

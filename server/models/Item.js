@@ -19,6 +19,9 @@ const itemSchema = new Schema({
         type: String,
         required: true
       },
+    itemImage: {
+        type: String,
+    },
     itemOwner: {
         type: Schema.Types.ObjectId,
         ref: 'Profile'

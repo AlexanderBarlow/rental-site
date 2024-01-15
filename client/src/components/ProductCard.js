@@ -1,66 +1,173 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import { useQuery } from '@apollo/client';
-import { QUERY_ALL_ITEM } from '../utils/queries'
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Collapse from "@mui/material/Collapse";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { red } from "@mui/material/colors";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Button from "@mui/material/Button";
+import { useMutation } from "@apollo/client";
+import { UPDATE_ITEM_AVAILABILITY, ADD_ITEM_TO_CART } from "../utils/mutations";
+import Auth from "../utils/auth";
+import { useQuery } from "@apollo/client";
+import { QUERY_SINGLE_PROFILE } from "../utils/queries";
+
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 function Product({ item }) {
+  const [updateItemAvailability] = useMutation(UPDATE_ITEM_AVAILABILITY);
+  const [addItemToCart] = useMutation(ADD_ITEM_TO_CART);
+  const { loading: userLoading, data: userData } = useQuery(
+    QUERY_SINGLE_PROFILE,
+    {
+      variables: { profileId: item.itemOwner._id },
+    }
+  );
 
-  const rented = (event) => {
+  const owner = userData?.profile || null;
+  console.log(owner);
+
+  const user = Auth.loggedIn() ? Auth.getProfile().data._id : null;
+
+  const rented = async (event) => {
     event.preventDefault();
-    document.getElementById(item._id).innerHTML = 'Rented';
-  }
+    if (!user) {
+      window.alert("Please log in to add this item to the cart.");
+      return;
+    }
+
+    if (item.availability && user) {
+      try {
+        await updateItemAvailability({
+          variables: {
+            _id: item._id,
+          },
+        });
+
+        await addItemToCart({
+          variables: {
+            itemId: item._id,
+            userId: user,
+            skip: !user,
+          },
+        });
+      } catch (error) {
+        console.error("An error occurred while processing the request:", error);
+        // Handle error, show a message, etc.
+      }
+    }
+  };
 
   const styles = {
     bgcolor: {
-      background: '#003554'
+      background: "#006494",
     },
     font: {
-      fontFamily: 'Times New Roman',
+      fontFamily: "Times New Roman",
     },
-    border: '5px solid black',
-    boxShadow: '5px 10px 10px #00A6FB',
-    marginBottom: '30px',
-    borderRadius: '10px',
-  }
+    border: "5px solid black",
+    marginBottom: "30px",
+    borderRadius: "10px",
+    btn: {
+      display: "flex",
+      justifyContent: "start",
+      alignItems: "center",
+    },
+  };
 
   const img = {
-    image: 'https://source.unsplash.com/random',
+    image: "https://source.unsplash.com/random",
+  };
+
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
   };
 
   return (
-    <Grid item xs={12} md={6}>
-      <CardActionArea style={styles} component="a" href="#">
-        <Card style={styles.bgcolor} sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography component="h2" variant="h5" color="white">
-              {item.itemName}
-            </Typography>
-            <Typography style={styles.font} variant="subtitle1" color="white">
-              {item.description}
-            </Typography>
-            <Typography variant="subtitle1" paragraph color="white">
-              ${item.itemPrice}
-            </Typography>
-          </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: '150px', height: "150px", display: { xs: 'none', sm: 'block' } }}
-            image={img.image}
-            alt='alt text'
-          />
-        </Card>
-        <Button variant="contained" style={styles.btn} className="glow" id={item._id} onClick={rented}>
-          Add your Product!
-        </Button>
-      </CardActionArea>
-    </Grid>
+    <Card
+      sx={{ maxWidth: 345, bgcolor: "#006494", flex: "0 0 100%", margin: "2%" }}
+    >
+      <CardHeader
+        avatar={
+          <Avatar sx={{ bgcolor: "inherit" }}>
+            {owner && owner.profileImage ? (
+              <img
+                src={owner.profileImage}
+                alt="Owner's Profile"
+                style={{ width: "100%", height: "100%", borderRadius: "50%" }}
+              />
+            ) : (
+              "R"
+            )}
+          </Avatar>
+        }
+        title={item.itemName}
+      />
+      <CardMedia
+        component="img"
+        height="194"
+        image={item.itemImage || img.image}
+        alt="Paella dish"
+      />
+      {/* Display item price at the bottom in a larger, bold font */}
+      <CardContent sx={{ textAlign: "center", paddingTop: "10px" }}>
+        <Typography variant="h6" fontWeight="bold">
+          Price: {item.itemPrice}
+        </Typography>
+      </CardContent>
+      <CardContent>
+        {item.availability ? (
+          <Button
+            variant="outlined"
+            sx={{ background: "#051923" }}
+            onClick={rented}
+            id="addtocart"
+          >
+            Add to Cart
+          </Button>
+        ) : (
+          <Button variant="outlined" sx={{ background: "#051923" }}>
+            Unavailable
+          </Button>
+        )}
+      </CardContent>
+      <CardActions disableSpacing>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
+      </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography paragraph>Description:</Typography>
+          <Typography paragraph>{item.description}</Typography>
+        </CardContent>
+      </Collapse>
+    </Card>
   );
 }
 

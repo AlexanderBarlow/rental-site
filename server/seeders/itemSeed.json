@@ -3,7 +3,8 @@
     "itemName": "Lawnmower",
     "description": "Cuts fast",
     "itemPrice": "10",
-    "city": "Test"
+    "city": "Test",
+    "availability": true
   },
   {
     "itemName": "Lawnmower2",
@@ -16,6 +17,24 @@
     "description": "Cuts fast",
     "itemPrice": "10",
     "city": "Test2"
+  },
+  {
+    "itemName": "Lawnmower4",
+    "description": "Cuts fast",
+    "itemPrice": "10"
+    ,"city": "Test3"
+  },
+  {
+    "itemName": "Lawnmower4",
+    "description": "Cuts fast",
+    "itemPrice": "10"
+    ,"city": "Test3"
+  },
+  {
+    "itemName": "Lawnmower4",
+    "description": "Cuts fast",
+    "itemPrice": "10"
+    ,"city": "Test3"
   },
   {
     "itemName": "Lawnmower4",

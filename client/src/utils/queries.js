@@ -15,20 +15,47 @@ export const QUERY_SINGLE_PROFILE = gql`
         profile(profileId: $profileId) {
             email
             city
+            profileImage
         }
     }
 `;
 
 export const QUERY_SESSION_USER = gql`
-query sessionUser($profileId: ID!) {
+query profile($profileId: ID!) {
     profile(profileId: $profileId) {
       email
       city
+      username
+      profileImage
+      backgroundImage
       rentable_items {
         itemName
-        description
-        itemPrice
       }
+    }
+  }
+`;
+
+export const QUERY_ITEMS = gql`
+query Rentable_items($profileId: ID!) {
+  rentable_items(profileId: $profileId) {
+    _id
+    itemName
+    itemPrice
+    description
+    itemImage
+  }
+}
+`;
+
+export const  GetItemDetails = gql`
+query GetItemDetails($itemId: ID!) {
+    item(itemId: $itemId) {
+      _id
+      itemName
+      description
+      itemPrice
+      city
+      availability
     }
   }
 `;
@@ -36,10 +63,37 @@ query sessionUser($profileId: ID!) {
 export const QUERY_ALL_ITEM = gql`
     query items {
         items {
-        itemName
-        description
-        itemPrice
-        _id
+          _id
+          availability
+          city
+          description
+          itemName
+          itemPrice
+          itemImage
+          itemOwner {
+            _id
+            profileImage
+          }
     }
     }
 `;
+
+export const GET_CART = gql`
+query Items($userId: ID!) {
+  userCart(userId: $userId) {
+    itemName
+    itemPrice
+    itemOwner {
+      _id
+    }
+  }
+} 
+`;
+
+export const GET_CREDITS = gql`
+query Query($userId: ID!) {
+  userCredits(userId: $userId) {
+    amount
+  }
+}
+`

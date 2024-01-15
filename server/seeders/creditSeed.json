@@ -1,0 +1,28 @@
+[
+    {
+      "amount": 25.0,
+      "date": "2023-09-20",
+      "profile": "profileId1"
+    },
+    {
+      "amount": 40.0,
+      "date": "2023-10-02",
+      "profile": "profileId2"
+    },
+    {
+      "amount": 30.0,
+      "date": "2023-10-07",
+      "profile": "profileId1"
+    },
+    {
+      "amount": 50.0,
+      "date": "2023-10-21",
+      "profile": "profileId3"
+    },
+    {
+      "amount": 35.0,
+      "date": "2023-10-28",
+      "profile": "profileId4"
+    }
+  ]
+  

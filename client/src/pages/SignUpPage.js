@@ -20,6 +20,7 @@ import Auth from '../utils/auth';
 function SignUp(props) {
   const [formState, setFormState] = useState({
     email: '',
+    username:'',
     password: '',
     city: '',
   });
@@ -35,32 +36,19 @@ function SignUp(props) {
   };
 
 const handleFormSubmit = async (event) => {
-  event.preventDefault();
+  event.preventDefault(); 
+  console.log(formState);
 
-  try {
-    const { data } = await addProfile({
-      variables: {
-        email: formState.email,
-        password: formState.password,
-        city: formState.city,
-      },
-    });
-
-    if (data.addProfile.token) {
-      // Store the token in local storage using AuthService
-      Auth.login(data.addProfile.token);
-
-    }
-  } catch (error) {
-    console.error(error);
-  }
-
-  // Clear form values
-  setFormState({
-    email: '',
-    password: '',
-    city: '',
-  });
+ const mutationResponse = await addProfile({
+  variables: {
+    email: formState.email,
+    username: formState.username,
+    password: formState.password,
+    city: formState.city,
+  },
+ });
+ const token = mutationResponse.data.addProfile.token;
+ Auth.login(token);
 };
 
 function Copyright(props) {
@@ -135,6 +123,18 @@ const theme = createTheme();
                 name="email"
                 autoComplete="email"
                 value={formState.email}
+                onChange={handleChange}
+                autoFocus
+              />
+                <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="username"
+                name="username"
+                autoComplete="username"
+                value={formState.username}
                 onChange={handleChange}
                 autoFocus
               />

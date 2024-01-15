@@ -1,34 +1,47 @@
 import * as React from "react";
 import "materialize-css/dist/css/materialize.min.css";
 import ProfilePageMain from "../components/Profile/Profile";
-import { Link } from "react-router-dom";
-import Button from '@mui/material/Button';
-import { borderRadius, width } from "@mui/system";
-
-
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { useTheme } from "@mui/material/styles";
 
 const styles = {
   height: {
     height: "100%",
     padding: "2px",
+    background: "#006494",
+    display: "flex",
+    justifyContent: "start",
+    alignItems: "center",
+    width: "100%",
   },
-  btn: {
-    fontSize: "1.25rem", 
-    fontWeight: "700", 
-    color: "#00A6FB",
-    background: "#051923",
+  center: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
-}
+};
 
 export default function ProfilePage() {
+  const theme = createTheme();
+
+  // Function to generate styles based on medium breakpoints (md)
+  const mediumScreenStyles = theme.breakpoints.up("md");
+
+  const dynamicStyles = {
+    ...(mediumScreenStyles && {
+      height: "100%",
+      width: "100%",
+      background: "#006494",
+    }),
+  };
+
   return (
-    <div style={styles.height}>
-      <ProfilePageMain />
-      <Link  to="/addproduct">
-        <Button variant="contained" style={styles.btn} className="glow">
-          Add your Product!
-        </Button>
-      </Link>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div style={dynamicStyles}>
+        <ProfilePageMain />
+      </div>
+    </ThemeProvider>
   );
 }

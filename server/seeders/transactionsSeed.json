@@ -1,0 +1,33 @@
+[
+    {
+      "amount": 50.0,
+      "type": "credit_purchase",
+      "date": "2023-09-15",
+      "description": "Rent for September"
+    },
+    {
+      "amount": 30.0,
+      "type": "credit_purchase",
+      "date": "2023-10-01",
+      "description": "Rent for September"
+    },
+    {
+      "amount": 20.0,
+      "type": "credit_purchase",
+      "date": "2023-10-05",
+      "description": "Rent for September"
+    },
+    {
+      "amount": 100.0,
+      "type": "credit_purchase",
+      "date": "2023-10-20",
+      "description": "Rent for September"
+    },
+    {
+      "amount": 75.0,
+      "type": "credit_purchase",
+      "date": "2023-10-25",
+      "description": "Rent for September"
+    }
+  ]
+  

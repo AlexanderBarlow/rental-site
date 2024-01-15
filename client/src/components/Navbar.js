@@ -1,143 +1,312 @@
-import React, { useEffect, useState } from "react";
-import "materialize-css/dist/css/materialize.min.css";
-import { Link, useLocation } from "react-router-dom";
-import Auth from '../utils/auth';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 import LOGO from "../images/logo1.png";
+import Icon from "@mui/icons-material/ShoppingCart";
+import { GET_CART } from "../utils/queries";
+import { GET_CREDITS } from "../utils/queries";
+import {
+  useMediaQuery,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Badge,
+  Divider,
+} from "@mui/material";
+import Icon2 from "@mui/icons-material/Menu";
+import Auth from "../utils/auth";
+import { makeStyles } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
+import anchorEl from "@mui/material/Menu";
+import handleMobileMenuClose from "@mui/material/Menu";
+import handleMobileMenuOpen from "@mui/material/Menu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCreditCard } from "@fortawesome/free-regular-svg-icons";
 
-const styles = {
-  color: {
-    background: "#051923",
-    textAlign: "center",
-    height: "fit-content",
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: '100%',
-    padding: '10px',
-  },
-  img: {
-    height: '20%', // Set a fixed height
-    width: '20%', // Set a fixed width
-    padding: '2px',
-  },
-  logoText: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  nav: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  li: {
-    margin: '10px 20px', // Add margin for spacing
-  },
-  // Media Query for screens with a max width of 768px (adjust as needed)
-  '@media (max-width: 768px)': {
-    container: {
-      flexDirection: 'column', // Stack items vertically
-    },
-    logoText: {
-      marginBottom: '10px', // Add space below logo and text
-    },
-    li: {
-      margin: '10px 0', // Adjust margin for spacing
-    },
-    // Add styles for smaller screens here
-  },
-  // Additional Media Queries for smaller screens
-  '@media (max-width: 576px)': {
-    // Adjust styles for screens with a max width of 576px
-    container: {
-      display: 'inline-flex',
-      flexDirection: 'row', // Stack items vertically
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontSize: '1rem',
-    },
-  },
-  '@media (max-width: 414px)': {
-    // Adjust styles for screens with a max width of 414px (iPhone 12, for example)
-  },
-};
+
 
 function Navbar() {
-  const location = useLocation();
-  const [userId, setUserId] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [cartTotal, setCartTotal] = useState(0);
+  const [cartData, setCartData] = useState(null);
+  const [credits, setCredits] = useState(0);
+
+  const theme = useTheme();
 
   useEffect(() => {
-    let id = Auth.getUserId();
-    if (id) {
-    id= id.data._id
-    }
-    setUserId(id || null);
-  }, []);
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < theme.breakpoints.values.md);
+    };
 
-  console.log(userId);
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, [theme.breakpoints.values.md]);
+
+  const userId = Auth.loggedIn() ? Auth.getProfile().data._id : null;
+
+  const { loading, data } = useQuery(GET_CART, {
+    variables: { userId },
+    skip: !userId,
+  });
+
+  const { loading: creditLoading, data: creditData } = useQuery(GET_CREDITS, {
+    variables: { userId },
+    skip: !userId,
+  });
+
+  useEffect(() => {
+    if (creditData && creditData.userCredits) {
+      setCredits(creditData.userCredits.amount);
+    }
+  }, [creditData]);
+
+  useEffect(() => {
+    if (data && data.userCart) {
+      setCartTotal(data.userCart.length);
+      setCartData(data.userCart);
+    }
+  }, [data]);
 
   const logout = (event) => {
     event.preventDefault();
+    handleLinkClick();
     Auth.logout();
-    window.location.replace('/');
+    window.location.replace("/");
   };
 
+  const menuId = "primary-search-account-menu";
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
+
+  const handleLinkClick = () => {
+    handleMobileMenuClose(); // Close the mobile menu
+  };
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(null); // State for mobile menu anchor
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMenuOpen(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMenuOpen(null);
+  };
+
+  const MobileMenu = (
+    <Menu
+      anchorEl={mobileMenuOpen}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={Boolean(mobileMenuOpen)}
+      onClose={handleMobileMenuClose} // Use the close function here
+      PaperProps={{
+        style: {
+          background: "#051923", // Set your desired background color here
+        },
+      }}
+    >
+      <MenuItem
+        component={Link}
+        to="/market"
+        onClick={handleLinkClick}
+        sx={{ color: "#FFF" }}
+      >
+        Market
+      </MenuItem>
+      <Divider />
+      {Auth.loggedIn() ? (
+        <MenuItem
+          component={Link}
+          to={`/profile/${userId}`}
+          onClick={handleLinkClick}
+          sx={{ color: "#FFF" }}
+        >
+          Profile
+        </MenuItem>
+      ) : (
+        <MenuItem
+          component={Link}
+          to="/login"
+          onClick={handleLinkClick}
+          sx={{ color: "#FFF" }}
+        >
+          Login
+        </MenuItem>
+      )}
+      <Divider />
+      {Auth.loggedIn() && (
+        <MenuItem
+          component={Link}
+          to="/checkout"
+          onClick={handleLinkClick}
+          sx={{ color: "#FFF" }}
+        >
+          <Typography sx={{ color: "#FFF" }}>
+            <Icon /> ({cartTotal})
+          </Typography>
+        </MenuItem>
+      )}
+      <Divider />
+      {Auth.loggedIn() && (
+        <MenuItem
+          component={Link}
+          to="/addcredits"
+          onClick={handleLinkClick}
+          sx={{ color: "#FFF", justifyContent: "center" }}
+        >
+          <FontAwesomeIcon icon={faCreditCard} size="xl" />
+        </MenuItem>
+      )}
+      <Divider />
+      {Auth.loggedIn() && (
+        <MenuItem sx={{ color: "#FFF" }} onClick={logout}>
+          Logout
+        </MenuItem>
+      )}
+    </Menu>
+  );
+
   return (
-    <nav style={styles.color}>
-      <div className="container" style={styles.container}>
-        <div style={styles.logoText}>
-          <img src={LOGO} alt='logo' style={styles.img} />
-          <Link className="text-dark glow" to="/">
-            <h3 style={{ fontSize: "1.5rem", margin: 0 }}>NestEase</h3>
-          </Link>
-        </div>
-        <ul className="nav nav-tabs" id="nav-mobile" style={styles.nav}>
-          <li className="nav-items" style={styles.li}>
-            <Link className="text-dark glow" to="/market">
-              <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>
-                Products
-              </h3>
-            </Link>
-          </li>
-          <li className="nav-items" style={styles.li}>
-            <Link className="text-dark glow" to="/about">
-              <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>
-                About
-              </h3>
-            </Link>
-          </li>
-          {userId ? (
-            <>
-              <li style={styles.li}>
-                <Link className="text-dark glow" to={`/${userId}`}>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Profile</h3>
-                </Link>
-              </li>
-              <li style={styles.li}>
-                <a className="text-dark glow" onClick={logout}>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Logout</h3>
-                </a>
-              </li>
-            </>
-          ) : (
-            <>
-              <li style={styles.li} className="login-link">
-                <Link className="text-dark glow" to="/login">
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Login</h3>
-                </Link>
-              </li>
-              <li style={styles.li} className="signup-link">
-                <Link className="text-dark glow" to="/signup">
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: "700" }}>Signup</h3>
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-      </div>
-    </nav>
+    <AppBar position="static" style={{ background: "#051923", width: "100%" }}>
+    <Toolbar>
+      {!isMobile && (  // Conditional rendering of the logo for non-mobile devices
+        <img
+          src={LOGO}
+          alt="logo"
+          style={{ height: "50px", width: "50px", padding: "2px" }}
+        />
+      )}
+      <Typography
+        variant="h6"
+        component={Link}
+        to="/"
+        sx={{
+          flexGrow: 1,
+          textDecoration: "none",
+          color: "inherit",
+          paddingLeft: isMobile ? "0" : "20px", // Adjust padding for mobile view
+        }}
+      >
+        NestEase
+      </Typography>
+        {isMobile ? (
+          <>
+            <IconButton
+              edge="end"
+              color="inherit"
+              aria-label="menu"
+              onClick={handleMobileMenuOpen}
+            >
+              <Icon2 />
+            </IconButton>
+            {MobileMenu}
+          </>
+        ) : (
+          <div>
+            <Typography
+              component={Link}
+              to="/market"
+              variant="h6"
+              sx={{
+                marginRight: "20px",
+                fontWeight: "600",
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              Market Place
+            </Typography>
+            {Auth.loggedIn() ? (
+              <Typography
+                component={Link}
+                to={`/profile/${userId}`}
+                variant="h6"
+                sx={{
+                  marginRight: "20px",
+                  fontWeight: "600",
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                Profile
+              </Typography>
+            ) : (
+              <Typography
+                component={Link}
+                to="/login"
+                variant="h6"
+                sx={{
+                  marginRight: "20px",
+                  fontWeight: "600",
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                Login
+              </Typography>
+            )}
+            {Auth.loggedIn() && (
+              <Typography
+                component={Link}
+                to="/checkout"
+                variant="h6"
+                sx={{
+                  marginRight: "20px",
+                  fontWeight: "600",
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                <Badge badgeContent={cartTotal} color="secondary">
+                  <Icon />
+                </Badge>
+              </Typography>
+            )}
+            {Auth.loggedIn() && (
+              <Link component={Link} to="/addcredits">
+                <FontAwesomeIcon icon={faCreditCard} size="xl" style={{color: "#ffffff", marginRight: "20px"}} />
+             </Link>
+            )}
+            {Auth.loggedIn() && ( 
+              <Typography
+                component={Link}
+                to="/"
+                onClick={logout}
+                variant="h6"
+                sx={{
+                  marginRight: "20px",
+                  fontWeight: "600",
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                Logout
+              </Typography>
+            )}
+          </div>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 }
 

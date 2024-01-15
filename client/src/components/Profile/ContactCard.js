@@ -1,87 +1,116 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import { useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { QUERY_SESSION_USER } from '../../utils/queries';
+import React, { useState, useEffect } from "react";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import Auth from "../../utils/auth";
+import { useQuery } from "@apollo/client";
+import { QUERY_SESSION_USER } from "../../utils/queries";
+import Box from "@mui/material/Box";
+import { Container } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
 
 function MainFeaturedPost(props) {
   const { post } = props;
+  const auth = Auth.getProfile();
+  const ID = auth.data._id;
 
-  // Get the 'id' from the route parameters
-  const { id } = useParams();
-  console.log(id);
-
-  // Use the 'useQuery' hook to fetch user data
-  const { loading, data } = useQuery(QUERY_SESSION_USER, {
-    variables: { profileId: id }, // Pass 'id' as 'profileId'
+  const { data, loading, error } = useQuery(QUERY_SESSION_USER, {
+    variables: { profileId: ID },
   });
-  console.log(data);
 
-  const profile = data?.profile || {};
+  const [userData, setUserData] = useState(null);
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
+
+  const img = {
+    image: "https://source.unsplash.com/random",
+  };
+
+  useEffect(() => {
+    if (data && data.profile) {
+      setUserData(data.profile);
+
+      // Assuming that data.profile.profileImage is the URL of the profile image in Firebase
+      setProfileImageUrl(data.profile.profileImage);
+    }
+  }, [data]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <p>Loading...</p>;
   }
 
-  return (
-    <Paper
-      sx={{
-        position: 'relative',
-        backgroundColor: 'grey.800',
-        color: '#fff',
-        mb: 4,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundImage: `url(${post.image})`,
-      }}
-    >
-      {/* Increase the priority of the hero background image */}
-      {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-          backgroundColor: 'rgba(0,0,0,.3)',
-        }}
-      />
-      <Grid container>
-        <Grid item md={6}>
-          <Box
-            sx={{
-              position: 'relative',
-              p: { xs: 3, md: 6 },
-              pr: { md: 0 },
-            }}
-          >
-            <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-              {profile.email}
-            </Typography>
-            <Typography variant="h5" color="inherit" paragraph>
-              City: {profile.city}
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid>
-    </Paper>
-  );
-}
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
 
-MainFeaturedPost.propTypes = {
-  post: PropTypes.shape({
-    description: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    imageText: PropTypes.string.isRequired,
-    linkText: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-  }).isRequired,
-};
+  if (userData && profileImageUrl) {
+    return (
+      <Container sx={{ width: "100%" }}>
+        <Paper
+          sx={{
+            position: "relative",
+            backgroundColor: "grey.800",
+            color: "#fff",
+            mb: 4,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundImage: `url(${profileImageUrl || img.image})`,
+            justifySelf: "center",
+            width: "100%",
+            padding: "0 2%",
+            display: "flex", // Added display flex to enable alignment
+          }}
+        >
+          <Grid container>
+            <Grid item md={6}>
+              <Box
+                sx={{
+                  position: "relative",
+                  p: { xs: 2, md: 6 },
+                  pr: { md: 0 },
+                }}
+              >
+                <Typography
+                  component="h1"
+                  variant="h3"
+                  color="inherit"
+                  gutterBottom
+                  sx={{ fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" } }}
+                >
+                  {userData.username}
+                </Typography>
+                <Typography
+                  variant="h5"
+                  color="inherit"
+                  paragraph
+                  sx={{ fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" } }}
+                >
+                  {userData.city}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid
+              item
+              md={6}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
+            >
+              <Avatar
+                alt="Profile Avatar"
+                src={profileImageUrl || img.image}
+                sx={{ width: 100, height: 100, marginRight: 2 }}
+              />
+            </Grid>
+          </Grid>
+        </Paper>
+      </Container>
+    );
+  } else {
+    return <p>Loading...</p>;
+  }
+}
 
 export default MainFeaturedPost;

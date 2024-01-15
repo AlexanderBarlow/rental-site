@@ -24,9 +24,8 @@ module.exports = {
 
     return req;
   },
-  signToken: function ({ _id }) {
-    const payload = { _id }; // Add 'sub' field with user's ID
+  signToken: function ({ email, _id }) {
+    const payload = { email, _id };
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
-  
 };
