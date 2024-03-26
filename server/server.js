@@ -16,7 +16,7 @@ const app = express();
 // Enable CORS for your frontend domain
 app.use(
   cors({
-    origin: ["https://nestease.vercel.app", "http://localhost:3000"],
+    origin: ["http://nestease.vercel.app", "http://localhost:3000"],
   })
 );
 
