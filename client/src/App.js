@@ -26,7 +26,7 @@ import EditProfile from "./pages/EditProfile"
 
 const httpLink = createHttpLink({
   uri:
-    "https://https://nestease.vercel.app.com"
+    "https://nestease.vercel.app.com"
 });
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
