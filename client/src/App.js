@@ -26,10 +26,10 @@ import EditProfile from "./pages/EditProfile"
 
 const httpLink = createHttpLink({
   uri:
-    "https://nestease.vercel.app" ||
-    "http://localhost:3001/graphql",
+    process.env.NODE_ENV === "production"
+      ? "https://https://nestease.vercel.app.com/graphql"
+      : "http://localhost:3001/graphql",
 });
-
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
 
