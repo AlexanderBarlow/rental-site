@@ -2,12 +2,8 @@ const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const path = require("path");
 const { authMiddleware } = require("./utils/auth");
-const stripe = require("stripe")(
-  process.env.secret_api
-);
-const env = require("dotenv").config();
+const stripe = require("stripe")(process.env.secret_api);
 const cors = require("cors");
-
 
 const Credit = require("./models/Credits");
 
@@ -51,7 +47,7 @@ app.get("*", function (req, res) {
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
-  server.applyMiddleware({ app, path: "/graphql"});
+  server.applyMiddleware({ app, path: "/graphql" });
 
   db.once("open", () => {
     app.listen(PORT, () => {
