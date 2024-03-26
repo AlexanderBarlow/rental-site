@@ -13,10 +13,6 @@ const db = require("./config/connection");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-// Enable CORS for your frontend domain
-app.use(cors({
-  origin: ["https://nestease.vercel.app", "http://localhost:3000"]
-}));
 
 const server = new ApolloServer({
   typeDefs,
