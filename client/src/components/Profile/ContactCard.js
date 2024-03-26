@@ -19,6 +19,7 @@ function MainFeaturedPost(props) {
 
   const [userData, setUserData] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState(null);
+  const [backgroundImageUrl, setBackgroundImage] = useState(null);
 
   const img = {
     image: "https://source.unsplash.com/random",
@@ -28,8 +29,12 @@ function MainFeaturedPost(props) {
     if (data && data.profile) {
       setUserData(data.profile);
 
-      // Assuming that data.profile.profileImage is the URL of the profile image in Firebase
-      setProfileImageUrl(data.profile.profileImage);
+      if (data.profile.profileImage) {
+        setProfileImageUrl(data.profile.profileImage);
+        setBackgroundImage(data.profile.backgroundImage);
+      } else {
+        setProfileImageUrl(img.image);
+      }
     }
   }, [data]);
 
@@ -41,7 +46,7 @@ function MainFeaturedPost(props) {
     return <p>Error: {error.message}</p>;
   }
 
-  if (userData && profileImageUrl) {
+  if (userData) {
     return (
       <Container sx={{ width: "100%" }}>
         <Paper
@@ -53,56 +58,42 @@ function MainFeaturedPost(props) {
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
-            backgroundImage: `url(${profileImageUrl || img.image})`,
-            justifySelf: "center",
-            width: "100%",
-            padding: "0 2%",
-            display: "flex", // Added display flex to enable alignment
+            backgroundImage: `url(${backgroundImageUrl || img.image})`,
           }}
         >
-          <Grid container>
-            <Grid item md={6}>
-              <Box
-                sx={{
-                  position: "relative",
-                  p: { xs: 2, md: 6 },
-                  pr: { md: 0 },
-                }}
-              >
-                <Typography
-                  component="h1"
-                  variant="h3"
-                  color="inherit"
-                  gutterBottom
-                  sx={{ fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" } }}
-                >
-                  {userData.username}
-                </Typography>
-                <Typography
-                  variant="h5"
-                  color="inherit"
-                  paragraph
-                  sx={{ fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" } }}
-                >
-                  {userData.city}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={6}
+          <Grid
+            container
+            alignItems="start"
+            textAlign="center"
+            sx={{
+              flexDirection: "column", // Vertical layout
+              padding: { xs: 4, sm: 6, md: 8 },
+            }}
+          >
+            <Avatar
+              alt="Profile Avatar"
+              src={profileImageUrl || img.image}
               sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "center",
+                width: { xs: 100, sm: 120, md: 150 }, // Adjust the width for different screen sizes
+                height: { xs: 100, sm: 120, md: 150 }, // Adjust the height accordingly
+                marginBottom: 2,
+              }}
+            />
+            <Typography
+              component="div"
+              variant="h3"
+              color="inherit"
+              gutterBottom
+              sx={{
+                fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+                marginBottom: "0.5rem", // Add space between username and city
               }}
             >
-              <Avatar
-                alt="Profile Avatar"
-                src={profileImageUrl || img.image}
-                sx={{ width: 100, height: 100, marginRight: 2 }}
-              />
-            </Grid>
+              {userData.username}
+            </Typography>
+            <Typography variant="h5" color="inherit">
+              {userData.city}
+            </Typography>
           </Grid>
         </Paper>
       </Container>

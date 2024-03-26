@@ -11,16 +11,18 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 const styles = {
-  hidden : {
-    display: "none"
-  }
-}
+  hidden: {
+    display: "none",
+  },
+};
 
 const EditProfile = () => {
   const [username, setUsername] = useState("");
-  const [profileImage, setProfileImage] = useState();
-  const [backgroundImage, setBackgroundImage] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState(null);
   const [city, setCity] = useState("");
+  const [profileImageStatus, setProfileImageStatus] = useState("blue");
+  const [backgroundImageStatus, setBackgroundImageStatus] = useState("blue");
 
   const [editProfile] = useMutation(EDIT_PROFILE);
 
@@ -55,6 +57,35 @@ const EditProfile = () => {
     setUsername(e.target.value);
   };
 
+  const isValidFileType = (file) => {
+    const allowedTypes = ["image/jpeg", "image/png"];
+    return allowedTypes.includes(file.type);
+  };
+
+  const handleProfileImageChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile && isValidFileType(selectedFile)) {
+      setProfileImage(selectedFile);
+      setProfileImageStatus("green");
+    } else {
+      setProfileImage(null);
+      setProfileImageStatus("red");
+      alert("Please select a valid PNG or JPG image for profile.");
+    }
+  };
+
+  const handleBackgroundImageChange = (e) => {
+    const File = e.target.files[0];
+    if (File && isValidFileType(File)) {
+      setBackgroundImage(File);
+      setBackgroundImageStatus("green");
+    } else {
+      setBackgroundImage(null);
+      setBackgroundImageStatus("red");
+      alert("Please select a valid PNG or JPG image for background.");
+    }
+  };
+
   const uploadImage = async (image, imageType, ID) => {
     if (image == null) {
       return null;
@@ -65,9 +96,6 @@ const EditProfile = () => {
 
     // Get the download URL for the uploaded file
     const imageUrl = await getDownloadURL(imageRef);
-
-    console.log(`Uploaded ${imageType} image!`);
-    alert(`Uploaded ${imageType} image!`);
 
     return imageUrl;
   };
@@ -97,11 +125,15 @@ const EditProfile = () => {
           backgroundImage: backgroundImageUrl || userData.backgroundImage || "",
         },
       });
-
-      console.log("Updated Profile Data:", data.editProfile);
+      alert("Profile Update Successfully")
       window.location.replace(`/profile/${ID}`);
     } catch (error) {
-      console.error("Error updating profile:", error);
+      if (error.message.includes("E11000 duplicate key error")) {
+        alert("Username is already taken. Please choose a different username.");
+        setUsername("");
+      } else {
+        console.error("Error updating profile:", error);
+      }
     }
   };
 
@@ -151,7 +183,15 @@ const EditProfile = () => {
                     variant="contained"
                     color="primary"
                     component="span"
-                    sx={{ mt: 2 }}
+                    sx={{
+                      mt: 2,
+                      backgroundColor:
+                        profileImageStatus === "green"
+                          ? "green"
+                          : profileImageStatus === "red"
+                          ? "red"
+                          : "primary",
+                    }}
                   >
                     Upload Profile Image
                     <UploadFileIcon />
@@ -161,9 +201,7 @@ const EditProfile = () => {
                   id="profileImageInput"
                   style={styles.hidden}
                   type="file"
-                  onChange={(e) => {
-                    setProfileImage(e.target.files[0]);
-                  }}
+                  onChange={handleProfileImageChange}
                 />
               </Box>
 
@@ -173,7 +211,15 @@ const EditProfile = () => {
                     variant="contained"
                     color="primary"
                     component="span"
-                    sx={{ mt: 2 }}
+                    sx={{
+                      mt: 2,
+                      backgroundColor:
+                        backgroundImageStatus === "green"
+                          ? "green"
+                          : backgroundImageStatus === "red"
+                          ? "red"
+                          : "primary",
+                    }}
                   >
                     Upload Background Image <UploadFileIcon />
                   </Button>
@@ -182,9 +228,7 @@ const EditProfile = () => {
                   id="backgroundImageInput"
                   style={styles.hidden}
                   type="file"
-                  onChange={(e) => {
-                    setBackgroundImage(e.target.files[0]);
-                  }}
+                  onChange={handleBackgroundImageChange}
                 />
               </Box>
             </div>

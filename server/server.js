@@ -24,12 +24,6 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
-app.use(
-  cors({
-    origin: "https://nestease.vercel.app",
-    credentials: true,
-  })
-);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -56,7 +50,7 @@ app.get("*", function (req, res) {
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
-  server.applyMiddleware({ app, path: "/graphql" });
+  server.applyMiddleware({ app, path: "/graphql"});
 
   db.once("open", () => {
     app.listen(PORT, () => {
