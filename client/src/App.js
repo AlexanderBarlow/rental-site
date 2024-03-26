@@ -25,8 +25,9 @@ import AddCreddit from "./pages/AddCredit";
 import EditProfile from "./pages/EditProfile";
 
 const httpLink = createHttpLink({
-  uri: "/graphql",
+  uri: "http://localhost:3001/graphql",
 });
+
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
 
