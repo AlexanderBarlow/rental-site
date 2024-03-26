@@ -10,11 +10,12 @@ const Credit = require("./models/Credits");
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
 
-const YOUR_DOMAIN = "https://nestease.vercel.app/";
-
 const PORT = process.env.PORT || 3001;
 const app = express();
-app.use(cors());
+
+// Enable CORS for your frontend domain
+app.use(cors({ origin: "https://nestease.vercel.app" }));
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -26,24 +27,15 @@ app.use(express.json());
 
 app.use("/images", express.static(path.join(__dirname, "../client/public")));
 
+// Serve static files from the client build directory in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
+
+  // For all other routes, serve the index.html file from the build directory
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+  });
 }
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
-});
-
-app.get("*", function (req, res) {
-  res.sendFile(
-    path.join(__dirname, "../client/build/index.html"),
-    function (err) {
-      if (err) {
-        res.status(500).send(__dirname);
-      }
-    }
-  );
-});
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
