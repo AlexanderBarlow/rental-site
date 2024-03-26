@@ -18,6 +18,7 @@ const YOUR_DOMAIN = "https://nestease.vercel.app/";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+app.use(cors());
 const server = new ApolloServer({
   typeDefs,
   resolvers,
