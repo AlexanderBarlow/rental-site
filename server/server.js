@@ -20,7 +20,7 @@ const server = new ApolloServer({
 });
 
 // Allow requests from specified origins
-// app.use(cors());
+app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
