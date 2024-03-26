@@ -18,15 +18,14 @@ import SignUpPage from "./pages/SignUpPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import ProfilePage from "./pages/ProfilePage";
 import Product from "./pages/Product";
-import About from './pages/About'
+import About from "./pages/About";
 import AddProduct from "./pages/AddProduct";
-import Stripe from "./pages/Stripe"
-import AddCreddit from "./pages/AddCredit"
-import EditProfile from "./pages/EditProfile"
+import Stripe from "./pages/Stripe";
+import AddCreddit from "./pages/AddCredit";
+import EditProfile from "./pages/EditProfile";
 
 const httpLink = createHttpLink({
-  uri:
-    "nestease.vercel.app.com"
+  uri: "nestease.vercel.app",
 });
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
@@ -44,27 +43,25 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-
 function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-          <Header />
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/market" element={<Product />} />
-              <Route path="/profile/:userId" element={<ProfilePage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/addproduct" element={<AddProduct />} />
-              <Route path="/stripe" element={<Stripe />} />
-              <Route path="/addcredits" element={<AddCreddit />} />
-              <Route path="/editprofile" element={<EditProfile />} />
-            </Routes>
-          <Footer />
-        
+        <Header />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/market" element={<Product />} />
+          <Route path="/profile/:userId" element={<ProfilePage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/addproduct" element={<AddProduct />} />
+          <Route path="/stripe" element={<Stripe />} />
+          <Route path="/addcredits" element={<AddCreddit />} />
+          <Route path="/editprofile" element={<EditProfile />} />
+        </Routes>
+        <Footer />
       </Router>
     </ApolloProvider>
   );
