@@ -19,6 +19,9 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
+// Allow requests from specified origins
+// app.use(cors());
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
