@@ -15,9 +15,7 @@ const app = express();
 
 // Enable CORS for your frontend domain
 app.use(
-  cors({
-    origin: ["http://nestease.vercel.app", "http://localhost:3000"],
-  })
+  cors()
 );
 
 const server = new ApolloServer({

@@ -25,7 +25,7 @@ import AddCreddit from "./pages/AddCredit";
 import EditProfile from "./pages/EditProfile";
 
 const httpLink = createHttpLink({
-  uri: "https://nestease.vercel.app",
+  uri: "http://localhost:3001/graphql",
   cache: new InMemoryCache(),
 });
 
