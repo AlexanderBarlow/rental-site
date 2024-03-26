@@ -13,6 +13,8 @@ const db = require("./config/connection");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+// Enable CORS for all origins and methods
+app.use(cors());
 
 const server = new ApolloServer({
   typeDefs,
