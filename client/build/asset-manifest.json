@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2a8f5667.css",
+    "main.js": "/static/js/main.554ca121.js",
+    "static/js/735.61666eeb.chunk.js": "/static/js/735.61666eeb.chunk.js",
+    "static/media/express_checkout_ce31841eb7.png": "/static/media/express_checkout_ce31841eb7.6d0d3b9029ba439ad35a.png",
+    "static/media/3D Paths - Lines 1 - Copy@1-2560x1363.jpg": "/static/media/3D Paths - Lines 1 - Copy@1-2560x1363.6044bfbe8a9b304f6ce7.jpg",
+    "static/media/Checkout-social-card.png": "/static/media/Checkout-social-card.d742f8e8b6b3a75cac98.png",
+    "static/media/how-to-make-money-online.jpg": "/static/media/how-to-make-money-online.26fd5171799ca767f9bd.jpg",
+    "static/media/logo1.png": "/static/media/logo1.e151f6c98ee2e3d577e2.png",
+    "service-worker.js": "/service-worker.js",
+    "index.html": "/index.html",
+    "main.2a8f5667.css.map": "/static/css/main.2a8f5667.css.map",
+    "main.554ca121.js.map": "/static/js/main.554ca121.js.map",
+    "735.61666eeb.chunk.js.map": "/static/js/735.61666eeb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2a8f5667.css",
+    "static/js/main.554ca121.js"
+  ]
+}
